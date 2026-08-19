@@ -49,7 +49,14 @@
     }
     section:first-of-type { border-top: 0; margin-top: 0; }
     h2 { font-size: 1.25rem; margin: 0 0 0.75rem; }
-    .placeholder { color: var(--muted); font-style: italic; }
+    h3 { font-size: 1.08rem; margin: 1.6rem 0 0.5rem; }
+    p { margin: 0 0 0.85rem; }
+    ul { margin: 0 0 0.85rem; padding-left: 1.2rem; }
+    code {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.88em;
+    }
+    .sev { font-weight: 700; }
     footer {
       padding: 1.5rem 1.25rem 2.5rem;
       color: var(--muted);
@@ -71,23 +78,126 @@
   <main>
     <section id="part-1">
       <h2>Part 1 — Handover review</h2>
-      <p class="placeholder">Content in C2.</p>
+      <p>Read against <code>review/handover-architecture.md</code>. Severity: <strong>critical</strong> = data loss, leak, or legal exposure. <strong>serious</strong> = breaks under real load or real use.</p>
+
+      <h3>1. Tenant context leaks across pooled connections</h3>
+      <p><strong>Handover:</strong> §1, <code>setTenantContext</code> — <code>SET app.current_tenant = '${tenantId}'</code> with no <code>LOCAL</code>.</p>
+      <p><strong>Problem:</strong> <code>SET</code> (session) survives the request. The connection goes back to the pool still tagged as yesterday’s tenant.</p>
+      <p><strong>In practice:</strong> Request for Client A, then the next checkout of that connection is Client C. RLS reads <code>app.current_tenant</code> and returns A’s rows to C — or C’s rows to A. An <em>unset</em> GUC is fail-closed (<code>current_setting(..., true)</code> is NULL, the policy matches nothing). A <em>stale</em> GUC is fail-open to the wrong tenant. Handlers do not filter by <code>tenant_id</code> themselves; RLS is the only barrier.</p>
+      <p><span class="sev">Severity: critical.</span></p>
+      <p><strong>Fix:</strong> <code>SELECT set_config('app.current_tenant', $1, true)</code> inside the request transaction so it is <code>LOCAL</code> and parameterised. Reset or discard the connection if the transaction does not run.</p>
+
+      <h3>2. Tenant id interpolated into SQL</h3>
+      <p><strong>Handover:</strong> §1, same <code>setTenantContext</code> snippet.</p>
+      <p><strong>Problem:</strong> The tenant UUID is concatenated into the query string.</p>
+      <p><strong>In practice:</strong> A crafted tenant id (or a bug that puts untrusted input in that slot) is SQL injection at the isolation boundary. Even without malice, quoting mistakes break or bypass the GUC.</p>
+      <p><span class="sev">Severity: critical.</span></p>
+      <p><strong>Fix:</strong> The same <code>set_config($1)</code> call as above. Never build <code>SET</code> with string interpolation.</p>
+
+      <h3>3. <code>audit_log</code> has no tenant and no RLS</h3>
+      <p><strong>Handover:</strong> §1, <code>audit_log</code> table. §7 lists it next to tenant tables but the schema has no <code>tenant_id</code>.</p>
+      <p><strong>Problem:</strong> Writes go to a global log. <code>payload jsonb</code> can hold whatever <code>logAction</code> dumps. The contractor says it is “operational, not tenant-facing” so they skipped isolation.</p>
+      <p><strong>In practice:</strong> Client C is under Israeli privacy law and expects an audit. National ID and clinical notes in <code>payload</code> sit outside RLS. Any <code>app_user</code> session that can read <code>audit_log</code> sees every tenant. You cannot produce a clinic-only audit export. You cannot prove to a regulator that clinic data never left clinic control if the log is in the shared pool.</p>
+      <p><span class="sev">Severity: critical (legal).</span></p>
+      <p><strong>Fix:</strong> Add <code>tenant_id</code>, enable RLS with the same policy as the other tenant tables, stop putting clinical fields in <code>payload</code> (or encrypt/redact). Do not treat the log as a debugging convenience.</p>
+
+      <h3>4. Notification runs inline on create</h3>
+      <p><strong>Handover:</strong> §4 <code>createReport</code> — <code>await sendConfirmationSms</code> before the 201. The author is proud that the caller “knows the notification went out.” §6 is the outbox for work that must not block the request.</p>
+      <p><strong>Problem:</strong> Create path contradicts the outbox the same person built. A slow or failing SMS/email holds the HTTP request. A crash after insert and before send loses the notification with no retry.</p>
+      <p><strong>In practice:</strong> Client A’s storm afternoon is 4,000 reports. Each waits on an SMS provider. Timeouts become 500s after the row exists. Client C’s “on Scheduled, email the physician” has the same shape if copied. The 201 is a lie if send fails after insert.</p>
+      <p><span class="sev">Severity: serious.</span></p>
+      <p><strong>Fix:</strong> Same pattern as §6: insert and enqueue in one transaction; let the relay send. The 201 means “accepted,” not “the carrier acknowledged.”</p>
+
+      <h3>5. List handler interpolates the table and selects every column</h3>
+      <p><strong>Handover:</strong> §5 <code>listRecords</code> — <code>SELECT * FROM ${table}</code>.</p>
+      <p><strong>Problem:</strong> Table name is interpolated. <code>SELECT *</code> returns every column, including Client C <code>clinical_notes</code>.</p>
+      <p><strong>In practice:</strong> If <code>table</code> is ever request-influenced, this is SQL injection. Even if it is an internal parameter, <code>SELECT *</code> ignores the brief: reception may see name, phone, appointment — not clinical notes. The same handler serves all three clients, so clinic rows leak notes to any role that can list.</p>
+      <p><span class="sev">Severity: serious, critical if <code>table</code> is not a fixed allow-list.</span></p>
+      <p><strong>Fix:</strong> Allow-list table names in code. Select an explicit column list (or a per-role projection). Do not return <code>clinical_notes</code> on a reception list.</p>
+
+      <h3>6. Offset pagination on a non-unique <code>created_at</code></h3>
+      <p><strong>Handover:</strong> §5 — <code>ORDER BY created_at DESC OFFSET $1 LIMIT $2</code>. “<code>created_at</code> has a plain index.” <code>limit</code> comes from the query string.</p>
+      <p><strong>Problem:</strong> Offset over a non-unique sort duplicates and skips rows when inserts land during paging. Deep offsets get expensive. <code>limit</code> is unvalidated. The index is global, not <code>(tenant_id, created_at)</code>.</p>
+      <p><strong>In practice:</strong> Call-centre operators page the storm queue and see the same report twice or miss one. At 300 tenants the index does not match the RLS predicate well. A client can pass <code>limit=1000000</code>.</p>
+      <p><span class="sev">Severity: serious.</span></p>
+      <p><strong>Fix:</strong> Keyset pagination (<code>(created_at, id)</code>). Cap <code>limit</code>. Index <code>(tenant_id, created_at DESC, id DESC)</code>.</p>
+
+      <h3>7. Outbox idempotency key drops real events</h3>
+      <p><strong>Handover:</strong> §6 — handlers “key off an <code>(event_type, entity_id)</code> pair to skip anything they've already processed.” The author is “fairly happy with” this section.</p>
+      <p><strong>Problem:</strong> <code>application.status_changed</code> (and the same shape for reports/referrals) fires more than once per entity. Deduping on entity id treats the second real transition as a duplicate.</p>
+      <p><strong>In practice:</strong> Submitted → Eligibility → … → Approved should send the decision email and later the fourteen-day follow-up. The second <code>status_changed</code> is skipped. Client C’s Scheduled email never goes out if Received already published the same pair. Retries of a <em>true</em> duplicate still need a key — but that key has to include the transition (event id, or <code>(event_type, entity_id, status)</code> / outbox row id), not the entity alone.</p>
+      <p><span class="sev">Severity: serious.</span></p>
+      <p><strong>Fix:</strong> Idempotency on the outbox row id (or event id), not <code>(event_type, entity_id)</code>.</p>
+
+      <h3>Things that look wrong but are not</h3>
+      <p>Each item below is something a reviewer could flag; I would not.</p>
+
+      <p><strong>A. Transactional outbox (handover §6).</strong> Looks wrong: extra table, a polling relay, retries, a dead-letter table — more moving parts than <code>await sendEmail</code> on the request path. Why it is fine: the write and the enqueue share one database transaction. The relay marks a row dispatched only after the broker acknowledges. A crash between COMMIT and publish loses nothing. Retries are capped (five, then DLQ). The defect in §6 is the consumer idempotency key, not the outbox. §4’s inline SMS is the absence of this pattern, not a reason to distrust the pattern where it exists.</p>
+
+      <p><strong>B. <code>current_setting(..., true)</code> (handover §1).</strong> Looks wrong: swallowing a missing GUC looks like failing open. Why it is fine: missing key → NULL. <code>NULL::uuid</code> does not equal any <code>tenant_id</code>, so the policy matches no rows. Unset is fail-closed. The leak is a <em>stale</em> session <code>SET</code>. Do not “fix” the <code>true</code> flag; fix how the GUC is scoped (<code>set_config(..., true)</code> / <code>LOCAL</code>).</p>
+
+      <p><strong>C. <code>custom_fields</code> JSONB + <code>field_definitions</code> (handover §3 / §7).</strong> Looks wrong: JSONB looks like EAV. Why it is fine: the product problem is constant “one more field” requests per tenant. Metadata lives in <code>field_definitions</code>; the JSONB column is the payload, not the schema. I would not replace it with per-client tables for custom fields.</p>
+
+      <p><strong>D. <code>app_admin</code> bypasses RLS (handover §1).</strong> Looks wrong: a role that ignores tenant policies. Why it is fine: migrations and one-off data fixes, not request-serving code. Table owners bypass RLS unless <code>FORCE ROW LEVEL SECURITY</code> is on, so <code>app_user</code> must not own the tables (or FORCE on). That is a hygiene check, not a finding that the admin role is the wrong design.</p>
+
+      <h3>What I would fix first</h3>
+      <p>I would fix the stale tenant GUC on pooled connections first (handover §1, <code>setTenantContext</code>). It is already live on every request. An unset GUC is fail-closed; a leftover <code>SET</code> from the previous checkout is fail-open to the wrong tenant. Handlers do not filter by <code>tenant_id</code>, so RLS is the only isolation. The change is one call: <code>SELECT set_config('app.current_tenant', $1, true)</code> inside the request transaction — which also removes the string-built tenant id in the same three-line function. I would not start with <code>audit_log</code> (real legal exposure, but it does not swap Client C’s rows into Client A’s UI) or with inline SMS / pagination (they hurt under load; they do not leak another tenant). Until the GUC is trustworthy, the rest of the isolation story is decorative.</p>
     </section>
+
     <section id="part-2">
       <h2>Part 2 — Library</h2>
-      <p class="placeholder">Content in C2.</p>
+      <p>Code: <a href="https://github.com/top1st/benoz-ai-exercise">https://github.com/top1st/benoz-ai-exercise</a> (public).</p>
+      <p><code>validateRecord(definition, record)</code> still returns <code>{ valid, errors }</code> with <code>errors</code> as <code>[{ field, message }, ...]</code>. Cross-field checks are a <code>rules</code> array on the definition. The README is the spec: operands are <code>{ "field": "name" }</code> or <code>{ "value": literal }</code>; operators <code>eq neq gt gte lt lte</code>; six decisions (error target, skip vs loud fail, non-goals). A definition with no <code>rules</code> key behaves as the original library.</p>
+      <p>Run: <code>node --test test/</code> (Node 18+, no dependencies). The original 16 tests in <code>test/validate.test.js</code> still pass by name.</p>
     </section>
+
     <section id="part-3">
       <h2>Part 3 — Three decisions</h2>
-      <p class="placeholder">Content in C2.</p>
+
+      <h3>Decision 1 — Isolation</h3>
+      <p>The platform is a <strong>pool</strong>: one database, one schema, <code>tenant_id</code> plus RLS. That is what is already built. I would keep it, and I would not add a silo path.</p>
+      <p>Client C’s regulator wants clinic data on infrastructure the clinic controls. A shared Postgres, however carefully keyed, is not that. RLS is a software boundary on a machine we operate. It cannot be the clinic’s own control. So I would <strong>lose Client C</strong> — the private specialist clinic — and any later client with the same regulatory demand. I would tell them so rather than pretend a GUC is a tenancy model their auditor will accept.</p>
+      <p>What that buys: Client A’s cost and same-day setup stay possible. A new city is a tenant row and a definition, not a database to provision. The unknown fourth client can still land if they look like A or B. The company thesis holds: client differences are configuration, not a second product.</p>
+      <p>What I am giving up is physical isolation, and with it every regulated tenant who needs it. The fourth client might be another clinic. If they are, we decline them. That is the cost of one approach.</p>
+      <p>I would still fix the stale-tenant GUC from Part 1. That is not a second isolation model. It is making the pool we chose actually isolate. It does not make Client C legal.</p>
+
+      <h3>Decision 2 — The eligibility score</h3>
+      <p>The formula lives as <strong>versioned tenant configuration</strong>, evaluated by a generic scorer. It does not live in application code, and it is not a Client B module. A formula document names the inputs (registry turnover, requested/turnover ratio, five-year grant history with recency weights, that round’s thematic weights), the combination, and the auto-reject threshold. A funding round pins a formula version.</p>
+      <p>When the board revises the formula (~once a year) or the round’s weights and threshold, we <strong>publish a new version</strong>. Applications already scored keep the version they were judged under. Re-scoring an in-flight application is an explicit action, not a silent rewrite of last quarter’s auto-rejects.</p>
+      <p>At score time we <strong>snapshot the inputs with the result</strong>: the registry API turnover (and the other inputs), the formula version id, the computed score, and the threshold used. The national registry will change. If we only store a number, an audit cannot reproduce why that application was rejected.</p>
+      <p>When Client C asks for something similar but different, they get the <strong>same engine and a different definition</strong> — for example a triage/priority formula over wait time and service line — not a clinic fork. Decision 1 still stands: we are not hosting that clinic. The same request will come from the next foundation, or from a city that wants a severity score. One mechanism, many definitions.</p>
+
+      <h3>Decision 3 — What breaks first</h3>
+      <p>At 300 clients the first component to fail is the <strong>global outbox table and its single polling relay</strong> (handover §6).</p>
+      <p>There is one unpublished queue and one process that drains it. Every tenant’s background work — Client A’s SMS, Client B’s decision email and fourteen-day follow-up — is a row in that table. At three clients the relay keeps up. At 300, a Client A storm (4,000 reports in an afternoon) dumps thousands of events into the same place. The relay is one serialization point. Client B’s mail waits behind A’s backlog.</p>
+      <p>What I would see: outbox depth climbing and not returning to baseline; time from COMMIT to broker ack stretching into minutes, then hours; dead-letter growth as handlers exhaust retries on work that is already stale; operators reporting that the status changed but the email never went.</p>
+      <p>What I would do: <strong>partition the outbox and the relay by tenant</strong> so A’s storm cannot starve B. Per-tenant queues, or a poll that fair-shares by <code>tenant_id</code>, are the same idea. That is the change for this component.</p>
     </section>
+
     <section id="part-4">
       <h2>Part 4 — AI transcripts</h2>
-      <p class="placeholder">Content in C2.</p>
+      <p>Cursor has no public share URL for this thread. The working conversation is on this site: <a href="transcript.html">full transcript</a> (18–19 Aug 2026). Tool names are kept; tool arguments (full file bodies) are omitted.</p>
+
+      <h3>Models and tools</h3>
+      <p>I used Cursor for the whole exercise: reading the brief and handover, designing the cross-field format, implementing the library, writing tests, rewriting the README, and drafting the written answers. I used Node’s test runner (<code>node --test</code>) after library changes — not as a second model. I did not use a separate chat product.</p>
+
+      <h3>A suggestion I rejected</h3>
+      <p>The original plan included a clarifying email to oz@benoz.ai on day one. The stated reason was that the brief rewards asking. I rejected sending it.</p>
+      <p>The three questions that had been queued were already answered in their README and library: <code>validateRecord(definition, record)</code> and <code>{ valid, errors }</code>; custom fields are just more named fields; the code repo should be public like the page. Emailing those would have been padding. The only email that remains is the page URL.</p>
+      <p>That rejection is in the transcript (why a clarifying email was needed; then that step was deleted, not marked skipped).</p>
+
+      <h3>Where the tools helped least</h3>
+      <p><strong>Decision 1 (isolation).</strong> The model can write “pool, lose Client C” and “silo, lose Client A” with equal fluency. That is a position I have to hold in the interview, not something the tools can settle.</p>
+      <p>Same for the voice of Parts 1 and 3. Submitting unread drafts would be submitting the tool’s wording as mine.</p>
+      <p>The unseen grader definition is also out of reach. Inventing a client from the README only is a simulation, not their file.</p>
+
+      <h3>What I left out, and what I am least confident about</h3>
+      <p>I did not verify <code>FORCE ROW LEVEL SECURITY</code> or table ownership against a running database — only the handover. I did not research Israeli privacy law beyond the brief. I did not propose a hybrid isolation model; the brief scores that zero.</p>
+      <p>I am least confident that the graders’ unseen rule stays inside the non-goals in the README, and that “lose Client C” is still the call I will defend given that clinic is already live on the pool.</p>
     </section>
   </main>
   <footer>
-    One page. No login required.
+    One page. No login required. Code: <a href="https://github.com/top1st/benoz-ai-exercise">github.com/top1st/benoz-ai-exercise</a>
   </footer>
 </body>
 </html>
