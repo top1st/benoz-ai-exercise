@@ -1,58 +1,129 @@
-# Starter package — Platform Foundation take-home
+# Platform Foundation — validation library
 
-This is the material referenced in Parts 1 and 2 of the exercise brief.
+Part 2 of the take-home. `validateRecord(definition, record)` still returns `{ valid, errors }` with `errors` as `[{ field, message }, ...]`. Cross-field checks are declared on the definition as data.
 
 ```
-review/
-  handover-architecture.md   <- Part 1: the contractor's handover notes
-lib/
-  validate.js                <- the validation library (Part 2 starting point)
-clients/
-  client-a-city-maintenance.json
-  client-b-grant-foundation.json
-  client-c-clinic.json       <- field definitions for the three live clients
-test/
-  validate.test.js           <- the existing passing test suite
-package.json
+review/handover-architecture.md
+lib/validate.js              validateRecord
+lib/rules.js                 cross-field engine (client-agnostic)
+clients/*.json               fixtures, including a real rule on Client B
+test/validate.test.js        original suite (unchanged)
+test/rules.test.js           cross-field tests
 ```
 
 ## Running it
 
-Node 18+, no dependencies to install.
+Node 18+, no dependencies.
 
 ```
-npm test
+node --test test/
 ```
 
-That runs the existing suite (`node --test test/validate.test.js`). It should pass as-is, out of the box, before you change anything.
+That runs every file under `test/`. `npm test` still runs only `test/validate.test.js` (the original suite). Both must pass.
 
-## What's here
+## Per-field validation
 
-`lib/validate.js` exports `validateRecord(definition, record)`. A **definition** is a list of field descriptions (name, label, type, required, options for choice-like fields, and a `constraints` object); a **record** is the plain object of submitted values. It returns `{ valid, errors }`, where `errors` is a list of `{ field, message }`.
+Unchanged. A definition has `fields`: `name`, `label`, `type`, `required`, optional `options` and `constraints`. Types: `text`, `long_text`, `number`, `boolean`, `date` (`YYYY-MM-DD`), `choice`, `multi_choice`, `file`.
 
-Supported field types today: `text`, `long_text`, `number`, `boolean`, `date` (`YYYY-MM-DD`), `choice`, `multi_choice`, `file`. Supported constraints vary by type: `min_length`/`max_length`/`pattern` for text, `min`/`max` for numbers, `min_selected`/`max_selected` for multi-choice, `accepted` (a list of extensions) for files. Look at `clients/*.json` for real examples of all of these in use, and `test/validate.test.js` for what each one rejects.
+A value is **absent** if it is `undefined`, `null`, an empty or whitespace-only string, or an empty array. `0` and `false` are present.
 
-The three client definition files are the actual field lists for the three clients described in the brief (Client A / City maintenance, Client B / Grant-making foundation, Client C / Private clinic) — field names match what the brief describes. They're here so you have real, non-trivial definitions to test against rather than inventing your own.
+## Cross-field rules
 
-**What the library does *not* do yet: cross-field validation.** Every check today looks at exactly one field in isolation. There's no way, today, to express "the project end date must not be before the project start date" — that rule spans two fields, and nothing in the current format has a place to put it.
+Optional `rules` array, sibling of `fields`. Omit it and behaviour is identical to the original library.
 
-## The task
+Each rule:
 
-Add cross-field validation to both the definition format and the library, so a rule like the one above can be **declared as data**, not written as a one-off `if` statement in application code.
+| Key | Required | Meaning |
+|---|---|---|
+| `left` | yes | operand (see below) |
+| `op` | yes | one of `eq`, `neq`, `gt`, `gte`, `lt`, `lte` |
+| `right` | yes | operand |
+| `target` | yes | field name the error attaches to |
+| `message` | yes | error message when the comparison does not match |
+| `id` | no | used only if `target` is missing, as a fallback error field |
 
-There's no single right answer here — that's deliberate. You'll need to decide (and this is the part we actually care about):
+Operands are objects. There are exactly two shapes:
 
-- **How a rule refers to another field.** What does the declaration look like? How does it name the field(s) it depends on?
-- **Which field the error is reported against.** If `project_end_date` is before `project_start_date`, does the error attach to the end date, the start date, or both? Pick one and say why.
-- **What happens when a dependency is missing.** If a rule needs `project_start_date` and it wasn't submitted (or itself failed its own per-field validation), does the cross-field rule still run? Silently pass? Silently fail? This should be a deliberate choice, not whatever happens to fall out of the code.
-- **Where you decided to stop.** A single date-comparison rule is easy to hardcode. A rule engine that can express arbitrary logic is a project. Somewhere between those is a boundary that covers real cases without turning the definition format into a programming language — where you draw that line, and why, matters more than how much you built.
+```json
+{ "field": "project_end_date" }
+{ "value": 5 }
+```
 
-Write all of this up in this README (replace this section, or add to it — your call), precisely enough that someone else could implement a new cross-field rule correctly from your description alone, without reading your code first.
+A bare string (`"project_end_date"`) is invalid. An object with both `field` and `value`, or with neither, is invalid.
 
-**Constraints on the implementation:**
+### Worked example
 
-- The existing tests in `test/validate.test.js` must still pass. If you change the behavior of an existing test, say why in your writeup.
-- Add tests for your new behavior, including the awkward cases above (missing dependency, invalid dependency, etc.) — not just the happy path.
-- Keep `lib/` client-agnostic: no client names, and no client-specific field names, anywhere in `lib/`. The three files under `clients/` are examples/fixtures, not part of the library.
+From `clients/client-b-grant-foundation.json`:
 
-We'll take your documented format and, after you submit, write a cross-field rule against a client and field set you haven't seen, following only your README. If we can write that rule correctly from your description, and your code handles it, that's the bar.
+```json
+{
+  "id": "end_not_before_start",
+  "left":  { "field": "project_end_date" },
+  "op":    "gte",
+  "right": { "field": "project_start_date" },
+  "target": "project_end_date",
+  "message": "Project end date must not be before project start date"
+}
+```
+
+`end >= start` holds. If it does not, one error is reported against `project_end_date`.
+
+A literal on one side is the same shape:
+
+```json
+{
+  "left": { "field": "requested_amount" },
+  "op": "lte",
+  "right": { "value": 100000 },
+  "target": "requested_amount",
+  "message": "Requested amount must be at most 100000"
+}
+```
+
+### Operators and types
+
+| Types | Operators | How |
+|---|---|---|
+| two numbers | all six | numeric |
+| two strings matching `YYYY-MM-DD` | all six | lexicographic (calendar order for that format) |
+| two booleans | `eq`, `neq` only | strict equality |
+
+Anything else — including `"10"` vs `9`, boolean `gt`, or a non-date string with `gt` — is a **loud** error (`Rule operands have mismatched types` or `Rule has an unknown operator`), not a failed comparison and not JavaScript coercion.
+
+Unknown `op` is loud: `Rule has an unknown operator`.
+
+### Evaluation order
+
+1. Every field is validated in isolation.
+2. Then each rule in `rules` order.
+3. Rule errors are appended to the per-field list.
+4. `valid` is true only if the combined list is empty.
+
+Several rules may share the same `target`. Each one that fails adds its own error.
+
+### When a rule does not run
+
+If a `{ "field" }` operand is absent, the rule is **skipped** (no rule error). Required-ness is already a per-field error; reporting both would be two errors for one mistake.
+
+If a referenced field already has a per-field error (wrong type, bad date such as `15/01/2027`), the rule is **skipped**. `{ "value" }` literals are not dependencies.
+
+### When a rule is malformed
+
+The rule emits one error and evaluation continues with the next rule. A silent pass is treated as the worst outcome.
+
+Malformed includes: missing/blank `target` or `message`; unknown `op`; `{ "field": "..." }` whose name is not in `fields`; invalid operand shape.
+
+The error's `field` is `target` if that is a non-empty string; otherwise `id`; otherwise `_rule`.
+
+## Design choices
+
+- **Field vs literal.** Explicit objects so a string cannot be mistaken for a field name.
+- **One `target`.** Guessing the field, or attaching to both sides, is unpredictable for a reader of the definition.
+- **Skip if missing.** The required check already ran.
+- **Skip if the dependency failed per-field validation.** Stops cascading nonsense on a bad date.
+- **Malformed is loud.** In a blind test, a silent pass looks like success.
+- **Where we stopped.** Comparison of two operands, six operators, three type pairs. No arithmetic, no “end = start + 14 days”, no “if status is X then Y is required”, no AND/OR trees, no comparing arbitrary strings with `gt`.
+
+## Tests
+
+The original 16 tests in `test/validate.test.js` were not changed. New behaviour, including missing/invalid dependencies and malformed rules, is in `test/rules.test.js`. `lib/` has no client names and no client field names.
