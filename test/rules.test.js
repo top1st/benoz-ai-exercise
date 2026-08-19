@@ -2,7 +2,8 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { evaluateRules, resolveOperand, compare } = require("../lib/rules");
+const { evaluateRules, resolveOperand, compare, shouldEvaluateRule } = require("../lib/rules");
+const { validateRecord } = require("../lib/validate");
 
 const definition = {
   fields: [
@@ -10,6 +11,7 @@ const definition = {
     { name: "end", label: "End", type: "date", required: true },
     { name: "count", label: "Count", type: "number", required: false },
     { name: "flag", label: "Flag", type: "boolean", required: false },
+    { name: "until", label: "Until", type: "date", required: false },
   ],
 };
 
@@ -68,8 +70,8 @@ test("operand naming a field not in the definition is unknown_field", () => {
   assert.deepEqual(result, { ok: false, error: "unknown_field" });
 });
 
-test("evaluateRules is still a stub", () => {
-  const result = evaluateRules(definition, { start: "2027-01-15" }, []);
+test("evaluateRules with no rules key returns no errors", () => {
+  const result = evaluateRules(definition, { start: "2027-01-15", end: "2027-12-15" }, []);
   assert.deepEqual(result, []);
 });
 
@@ -121,4 +123,201 @@ test("booleans support eq and neq", () => {
 
 test("unknown operator is unknown_op", () => {
   assert.deepEqual(compare(1, "foo", 2), { ok: false, error: "unknown_op" });
+});
+
+const dateOrderRule = {
+  left: { field: "end" },
+  op: "gte",
+  right: { field: "start" },
+};
+
+test("rule runs when both field dependencies are present and valid", () => {
+  const result = shouldEvaluateRule(
+    dateOrderRule,
+    { start: "2027-01-15", end: "2027-12-15" },
+    definition,
+    []
+  );
+  assert.deepEqual(result, { run: true });
+});
+
+test("optional field absent is missing_dependency", () => {
+  const result = shouldEvaluateRule(
+    { left: { field: "until" }, op: "gte", right: { field: "start" } },
+    { start: "2027-01-15" },
+    definition,
+    []
+  );
+  assert.deepEqual(result, { run: false, reason: "missing_dependency" });
+});
+
+test("required field absent with a required error does not run the rule", () => {
+  const result = shouldEvaluateRule(
+    dateOrderRule,
+    { end: "2027-12-15" },
+    definition,
+    [{ field: "start", message: "Start is required" }]
+  );
+  assert.equal(result.run, false);
+});
+
+test("field present but already failed per-field validation is invalid_dependency", () => {
+  const result = shouldEvaluateRule(
+    dateOrderRule,
+    { start: "15/01/2027", end: "2027-12-15" },
+    definition,
+    [{ field: "start", message: "Start must be a date in YYYY-MM-DD format" }]
+  );
+  assert.deepEqual(result, { run: false, reason: "invalid_dependency" });
+});
+
+test("literal operands are not dependencies", () => {
+  const result = shouldEvaluateRule(
+    { left: { field: "count" }, op: "gte", right: { value: 0 } },
+    { count: 3 },
+    definition,
+    []
+  );
+  assert.deepEqual(result, { run: true });
+});
+
+const wellFormedDateRule = {
+  id: "end_not_before_start",
+  left: { field: "end" },
+  op: "gte",
+  right: { field: "start" },
+  target: "end",
+  message: "End must not be before start",
+};
+
+test("a satisfied well-formed rule emits no errors", () => {
+  const def = { ...definition, rules: [wellFormedDateRule] };
+  const result = evaluateRules(
+    def,
+    { start: "2027-01-15", end: "2027-12-15" },
+    []
+  );
+  assert.deepEqual(result, []);
+});
+
+test("a violated well-formed rule emits the target and message", () => {
+  const def = { ...definition, rules: [wellFormedDateRule] };
+  const result = evaluateRules(
+    def,
+    { start: "2027-12-15", end: "2027-01-15" },
+    []
+  );
+  assert.deepEqual(result, [{ field: "end", message: "End must not be before start" }]);
+});
+
+test("a skipped missing dependency emits no rule error", () => {
+  const def = { ...definition, rules: [wellFormedDateRule] };
+  const result = evaluateRules(def, { end: "2027-12-15" }, []);
+  assert.deepEqual(result, []);
+});
+
+test("unknown operator is a loud rule error", () => {
+  const def = {
+    ...definition,
+    rules: [{ ...wellFormedDateRule, op: "before" }],
+  };
+  const result = evaluateRules(
+    def,
+    { start: "2027-01-15", end: "2027-12-15" },
+    []
+  );
+  assert.equal(result.length, 1);
+  assert.equal(result[0].field, "end");
+  assert.equal(result[0].message, "Rule has an unknown operator");
+});
+
+test("unknown field reference is a loud rule error", () => {
+  const def = {
+    ...definition,
+    rules: [{ ...wellFormedDateRule, right: { field: "nope" } }],
+  };
+  const result = evaluateRules(
+    def,
+    { start: "2027-01-15", end: "2027-12-15" },
+    []
+  );
+  assert.equal(result.length, 1);
+  assert.equal(result[0].field, "end");
+  assert.match(result[0].message, /unknown field/);
+});
+
+test("missing target is a loud rule error", () => {
+  const { target, ...rest } = wellFormedDateRule;
+  const def = { ...definition, rules: [rest] };
+  const result = evaluateRules(
+    def,
+    { start: "2027-01-15", end: "2027-12-15" },
+    []
+  );
+  assert.equal(result.length, 1);
+  assert.equal(result[0].field, "end_not_before_start");
+  assert.equal(result[0].message, "Rule is missing a target field");
+});
+
+test("missing message is a loud rule error", () => {
+  const { message, ...rest } = wellFormedDateRule;
+  const def = { ...definition, rules: [rest] };
+  const result = evaluateRules(
+    def,
+    { start: "2027-01-15", end: "2027-12-15" },
+    []
+  );
+  assert.equal(result.length, 1);
+  assert.equal(result[0].field, "end");
+  assert.equal(result[0].message, "Rule is missing a message");
+});
+
+test("invalid operand shape is a loud rule error", () => {
+  const def = {
+    ...definition,
+    rules: [{ ...wellFormedDateRule, right: "start" }],
+  };
+  const result = evaluateRules(
+    def,
+    { start: "2027-01-15", end: "2027-12-15" },
+    []
+  );
+  assert.equal(result.length, 1);
+  assert.equal(result[0].field, "end");
+  assert.equal(result[0].message, "Rule has an invalid operand");
+});
+
+test("validateRecord with no rules key is unchanged", () => {
+  const result = validateRecord(definition, { start: "2027-01-15", end: "2027-12-15" });
+  assert.equal(result.valid, true);
+  assert.deepEqual(result.errors, []);
+});
+
+test("validateRecord accepts a record that satisfies a well-formed rule", () => {
+  const def = { ...definition, rules: [wellFormedDateRule] };
+  const result = validateRecord(def, { start: "2027-01-15", end: "2027-12-15" });
+  assert.equal(result.valid, true, JSON.stringify(result.errors));
+});
+
+test("validateRecord reports a violated rule against the target", () => {
+  const def = { ...definition, rules: [wellFormedDateRule] };
+  const result = validateRecord(def, { start: "2027-12-15", end: "2027-01-15" });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some((e) => e.field === "end" && e.message === "End must not be before start"));
+});
+
+test("validateRecord does not add a rule error when a date field is malformed", () => {
+  const def = { ...definition, rules: [wellFormedDateRule] };
+  const result = validateRecord(def, { start: "15/01/2027", end: "2027-12-15" });
+  assert.equal(result.valid, false);
+  assert.equal(result.errors.filter((e) => e.field === "start").length, 1);
+  assert.ok(!result.errors.some((e) => e.message === "End must not be before start"));
+});
+
+test("validateRecord does not add a rule error when a required field is missing", () => {
+  const def = { ...definition, rules: [wellFormedDateRule] };
+  const result = validateRecord(def, { end: "2027-12-15" });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some((e) => e.field === "start"));
+  assert.ok(!result.errors.some((e) => e.message === "End must not be before start"));
 });
