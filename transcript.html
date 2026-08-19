@@ -1,0 +1,2773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI transcript — Benoz.AI take-home</title>
+  <style>
+    body {
+      margin: 0 auto;
+      max-width: 48rem;
+      padding: 2rem 1.25rem 3rem;
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.5;
+      color: #1a1a1a;
+      background: #fafafa;
+    }
+    a { color: #1a1a1a; }
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <p><a href="index.html">Back to the submission</a></p>
+  <h1>Cursor transcript</h1>
+  <p>Working conversation for this take-home. Cursor has no public share URL for the thread. Tool names are kept; tool arguments (full file bodies) are omitted.</p>
+  <pre># Cursor transcript — Benoz take-home
+
+Export of the working conversation used for this submission. Cursor has no public share URL for this thread. Tool call arguments are omitted (they contain full file contents); tool names are kept so the process is visible.
+
+Thread id: `4b2e47eb-814f-4783-a361-63bca8026501`
+
+---
+
+### user
+
+@local-docs/Benoz.AI - Take-Home Exercise.docx 
+
+Read this doc and find out what is missing or I needed to require to client again?
+
+---
+
+### assistant
+
+I'll read the take-home exercise document and check it against the project so we can see what's missing or still needed from the client.
+
+_Tools: Glob, Glob, Glob_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+The exercise is only in that Word file, so I’ll extract its text next and look for gaps or items to request from the client.
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: Read_
+
+---
+
+### assistant
+
+The brief is only the Word file so far. I’ll check it for links, attachments, and any mention of a starter package we still need from them.
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: Read_
+
+---
+
+### assistant
+
+I’ll remove the temporary extract files, then list what’s actually missing and what you should ask Benoz.AI for.
+
+_Tools: Delete, Delete_
+
+---
+
+### assistant
+
+You only have the briefing Word file. **The starter package is missing**, and that is the one thing you should ask Benoz.AI for again. Parts 1 and 2 cannot be done without it.
+
+The brief assumes you already received a **starter package**. This workspace has only `local-docs/Benoz.AI - Take-Home Exercise.docx`. There are no hyperlinks, attachments, or repo URLs in the document.
+
+## Ask for this now
+
+Email **oz@benoz.ai** and request the starter package. It must include:
+
+1. **`review/handover-architecture.md`** — needed for Part 1 (architecture review)
+2. **The working validation library** under something like `lib/`
+3. **The passing test suite**
+4. **The package README** — the brief says the full Part 2 task is there
+
+Without those, you cannot review the handover, extend the library, or keep existing tests passing.
+
+A short request:
+
+&gt; I have the take-home brief, but not the starter package it refers to (`review/handover-architecture.md`, the validation library, tests, and package README). Could you resend the package or a repo/download link?
+
+Also confirm **deadline: Friday, 21 Aug 2026, 11:59 PM PHT**. Today is 18 Aug, so three days is tight if the package is delayed.
+
+## Do not wait on these
+
+These are left open on purpose. Asking them is the exercise, not a blocker:
+
+| Topic | Why not to ask |
+|---|---|
+| Isolation (Decision 1) | They want **one** approach, not a hybrid |
+| Where the eligibility formula lives (Decision 2) | You decide |
+| What breaks at 300 clients (Decision 3) | You decide |
+| Cross-field validation format (Part 2) | You design it; they will write a hidden rule from your README |
+
+## Optional questions (only if you want)
+
+The brief says asking is part of the exercise. Keep it short:
+
+- Expected time budget (not stated)
+- Whether the code repo may be private, as long as they can open it (the **page** must be public with no login)
+- Language/runtime of the library (this should be obvious once the package arrives)
+
+## What you can already prepare
+
+- Hosted public page (GitHub Pages / Netlify / Vercel)
+- Page contents: Part 1 review, Part 2 code link, Part 3 decisions, Part 4 AI transcripts
+- Send only the page URL to `oz@benoz.ai` — not a Word/PDF/email body
+
+**Bottom line:** request the starter package again. Everything else in the Word file is enough to start thinking, but not enough to submit.
+
+---
+
+### user
+
+@local-docs/Benoz.AI - Take-Home Exercise.docx 
+create a md file
+
+---
+
+### assistant
+
+I'll convert the take-home Word doc into a markdown file and match the original structure.
+
+_Tools: Read, Shell_
+
+---
+
+### assistant
+
+
+_Tools: Read_
+
+---
+
+### assistant
+
+I'll write a formatted markdown version of the brief next to the original Word file.
+
+_Tools: Write, Delete_
+
+---
+
+### assistant
+
+Created `local-docs/Benoz.AI - Take-Home Exercise.md` from the Word brief, with headings, lists, and the original wording.
+
+---
+
+### user
+
+@local-docs/Benoz.AI - Take-Home Exercise.md   Read this file and plan how we will do this project, the plan should be an sequence instruction flow, not updating the code this time,
+
+---
+
+### assistant
+
+I'll read the starter package so the plan is grounded in the actual code and handover doc.
+
+_Tools: Read, Read_
+
+---
+
+### assistant
+
+Now let me look at the tests, client definitions, and package config to ground the Part 2 work.
+
+_Tools: Read, Read, Read_
+
+---
+
+### assistant
+
+Deadline check worth flagging up front: Friday Aug 21, 11:59 PM PHT is **Friday 11:59 AM your local time (UTC-4)** — about 3 days, and the effective cutoff is Friday morning, not Friday night.
+
+Let me read the remaining two client definitions and confirm two forks that would change the plan.
+
+_Tools: Read, Read_
+
+---
+
+### assistant
+
+I have everything I need on the code side. Two forks would change the plan significantly.
+
+_Tools: AskQuestion_
+
+---
+
+### assistant
+
+I have the full picture now. Reading the handover doc, I already found the load-bearing items (interpolated `SET app.current_tenant`, pooled-connection context leakage, `audit_log` with no `tenant_id`, inline SMS in the create path contradicting the outbox), plus a couple of things that look wrong but are actually correct — which the brief rewards specifically.
+
+_Tools: CreatePlan_
+
+---
+
+### user
+
+This plan is to just make an instruction, not real build code.
+
+---
+
+### assistant
+
+Understood — no code gets written or changed here. The plan file is instructions only, and nothing in it has been executed.
+
+Two things I want to get right before I revise it.
+
+_Tools: AskQuestion_
+
+---
+
+### assistant
+
+Both, keeping the detail. I'll read the plan file so the saved copy matches it exactly, then write the markdown into the project.
+
+_Tools: Read_
+
+---
+
+### assistant
+
+Writing the standalone instruction document into the project now.
+
+_Tools: Write_
+
+---
+
+### assistant
+
+Now adding the same "instructions only" framing to the plan file so the two match.
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+Saved the instruction flow to `local-docs/INSTRUCTIONS.md`, and the plan file now points to it. Both are instructions only — no code was written or changed, and `lib/`, `test/`, `clients/`, and `README.md` are all untouched.
+
+The document covers 10 sequenced steps, with the concrete material kept in place: the proposed `rules` format for Part 2, the six format decisions that get graded, the handover findings with severity, the items that look wrong but are actually correct, and a Tuesday-through-Friday schedule.
+
+Two things in there worth acting on regardless of when you start the build:
+
+The real deadline is **Friday 11:59 AM your time**, not Friday night — PHT is 12 hours ahead of you.
+
+And Step 0 says to start capturing AI transcripts *before* doing the work. Part 4 requires the actual conversations, and that is the one requirement you cannot satisfy retroactively.
+
+When you want to move from instructions to actual implementation, say so and I'll switch out of plan mode and start at Step 0.
+
+---
+
+### user
+
+@local-docs/INSTRUCTIONS.md 
+Split this INSTRUCTIONS as mini-tasks so that make sure each task do not make any bug.
+It should be audited every time,
+If possible add required rules and skills to do it.
+
+---
+
+### assistant
+
+I'll read the rule and skill authoring guides first, since you asked for rules and skills as part of this.
+
+_Tools: Read, Read_
+
+---
+
+### assistant
+
+Let me establish the real baseline so the audit gates reference actual numbers, not assumptions.
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+Baseline confirmed: 16 tests, all passing. Now I'll build the audit tooling, starting with a script that makes the gate mechanical rather than a thing you remember to do.
+
+_Tools: Write_
+
+---
+
+### assistant
+
+That baseline-check gate is needlessly convoluted and would misreport. Let me simplify it.
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+Good — the audit caught a false positive on its first run: `client-a` was matching inside the phrase "client-agnostic" in a comment. Substring matching is too loose; it needs word boundaries.
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+All five gates pass, and the audit already earned its keep by catching a false positive in its own first run. Now the rules and skill.
+
+_Tools: Write, Write_
+
+---
+
+### assistant
+
+
+_Tools: Write, Write_
+
+---
+
+### assistant
+
+Now the main deliverable. Let me check whether git is available for per-task rollback points.
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+Not a git repo yet, so per-task rollback points need `git init` first. I'll make that the first task rather than doing it unprompted.
+
+_Tools: Write_
+
+---
+
+### assistant
+
+Let me verify the repo is still clean after all these additions, and check the script for lint issues.
+
+_Tools: Shell, ReadLints_
+
+---
+
+### assistant
+
+The audit already fired once on a false positive, but I should prove it catches a real regression too. Let me temporarily break the contract in a way the tests alone would not notice.
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+Exactly the point: all 16 tests still passed, but the gate caught the drift that would break the graders' harness. Reverting now.
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+Split into 22 mini-tasks with a mechanical audit gate, and I proved the gate actually works rather than just asserting it. `lib/`, `test/`, and `clients/` are back to their original state — nothing in the starter package changed.
+
+**`local-docs/TASKS.md`** — the task breakdown. Three tracks: the library (A0–A9), the written parts (B1–B7), page and ship (C1–C5). Each task names the files it may touch, ends in a verifiable done-when, and is followed by the gate. Three constraints keep bugs from hiding: one task touches at most two files, behavior and its tests land together, and a failing gate is never carried forward.
+
+**`local-docs/audit.js`** — five checks, run as `node local-docs/audit.js`, exit 0 only if all pass.
+
+**Rules** in `.cursor/rules/`: `audit-gate.mdc` (always applies, enforces the workflow), `library-constraints.mdc` (scoped to `lib/`, `test/`, `clients/`), and `submission-requirements.mdc` (scoped to prose files, carries the brief's zero-score traps).
+
+**Skill** at `.cursor/skills/mini-task-audit/SKILL.md` — a six-step checklist for executing one task under the gate, invoked by name.
+
+## The gate proved itself twice
+
+On its very first run it failed, flagging `client-a` in `lib/validate.js`. That was a false positive — substring matching was hitting the phrase "client-agnostic" in a comment. Fixed with word-boundary matching.
+
+Then I deliberately broke the contract by adding a third parameter to `validateRecord`. **All 16 tests still passed**, but the gate caught it:
+
+```
+PASS  Test suite passes
+      16 passing across 1 file(s)
+FAIL  validateRecord contract unchanged
+      expected arity 2 (definition, record), got 3
+```
+
+That is the whole argument for auditing beyond `npm test`. The graders run your library against a definition file you have never seen, so signature drift breaks their harness while your suite stays green. Reverted, and the repo is back to 5/5 passing.
+
+## Why the library is split so finely
+
+A1 through A5 build operand resolution, comparison operators, the dependency gate, and malformed-rule handling as isolated pieces with their own tests, before A6 wires anything into `validateRecord`. A6 is the risky task, and by the time you reach it every piece it depends on is already proven. A1 is deliberately a no-op module that does nothing, so that any later failure is unambiguously about logic rather than plumbing.
+
+Two things to start today rather than at the end: **Q1**, the clarifying email, needs time for a reply, and **B7**'s AI transcripts are the one requirement you cannot satisfy retroactively.
+
+Task A0 is `git init` plus a commit — the repo isn't under version control yet, so "revert this task" has no meaning until it is. I left that for you rather than initializing it unprompted.
+
+---
+
+### user
+
+@local-docs 
+This folder should be ignored so what I have to include in report to client should not be there.
+
+---
+
+### assistant
+
+I'll check how ignore is set up now, then make `local-docs` stay out of anything you send to the client.
+
+_Tools: Read, Glob, Read_
+
+---
+
+### assistant
+
+A nested `*` only hides files inside that folder; a root `.gitignore` is what keeps `local-docs` out of the repo you send. I'll add that, and also keep Cursor working files out.
+
+_Tools: Glob, Read_
+
+---
+
+### assistant
+
+
+_Tools: Write, Write_
+
+---
+
+### assistant
+
+`local-docs/` is now ignored at the repo root, so it will not go into GitHub, Vercel, or anything you send.
+
+The nested `local-docs/.gitignore` with `*` was not enough on its own. Git still would have tracked that folder unless the **root** ignore listed it. I added [`.gitignore`](.gitignore) with:
+
+- `local-docs/` — brief, instructions, tasks, audit script, working notes
+- `.cursor/` — rules and skills for this exercise, also not part of the starter package
+
+What **will** still be in the repo you submit: `lib/`, `test/`, `clients/`, `review/`, `README.md`, `package.json`, and later `index.html`.
+
+After you `git init` and add files, confirm with:
+
+```powershell
+git status --ignored
+```
+
+You should see `local-docs/` listed as ignored, not as a folder to commit.
+
+---
+
+### user
+
+Plan the mini-task execution sequence
+
+---
+
+### assistant
+
+I'll read the current task list and repo state, then turn it into a single execution sequence you can follow in order.
+
+_Tools: Read, Read, Read, Read, Read_
+
+---
+
+### assistant
+
+I'll write a linear runbook: one numbered order, a gate after each step, and stop rules so we don't skip ahead.
+
+_Tools: Write_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+The run order is in [`local-docs/SEQUENCE.md`](local-docs/SEQUENCE.md). [`TASKS.md`](local-docs/TASKS.md) stays the task definitions; the sequence file is what you execute.
+
+**24 steps, one at a time.** After every code step, `node local-docs/audit.js` must exit 0. A red gate stops the line.
+
+1. **Today:** A0 (`git init`, confirm `local-docs/` is ignored, first commit) → Q1 (email oz@benoz.ai) → start collecting chat links for Part 4.
+2. **Tonight:** A1–A5. Build `lib/rules.js` in isolation. Do not touch `validate.js`.
+3. **Wednesday:** A6 wire-in → A7 Client B rule → A8 README spec → A9 blind-author test. Then freeze `lib/`.
+4. **Thursday:** B1–B7 as drafts in `local-docs/` → C1–C2 page. You rewrite the drafts in your own voice before they go on the page.
+5. **Friday morning, before 11:59 AM local:** C3 pre-flight → you push and deploy → email **only the page URL**.
+
+Do not overlap A1–A5 with A6, A6 with A7, or C4 with a dirty tree. Q1 and transcript collection *can* run in the background.
+
+When you want to start, say so and the first run is A0 only.
+
+---
+
+### user
+
+okay, we will follow the @local-docs/SEQUENCE.md , If I type continue then explain in detail what will going to do, I will confirm to do it agent or I will guide if I got something to do or update needed.
+
+---
+
+### assistant
+
+Understood. We will follow [`local-docs/SEQUENCE.md`](local-docs/SEQUENCE.md) exactly, one step at a time.
+
+**How it will work**
+
+1. You type **continue**.
+2. I explain the next step in detail: what it is, which files it may touch, what the audit/done-when looks like, and what I would do versus what only you can do.
+3. I wait. I do **not** run it until you say one of:
+   - **do it** — I execute that one step, then stop and report.
+   - **I’ll do it / change this first** — you guide or update, and I wait.
+
+**Where we are**
+
+Nothing from the sequence has started. The next step is **#1 A0** — `git init`, confirm `local-docs/` and `.cursor/` are ignored, first commit of the starter package only, then run the audit.
+
+Type **continue** when you want the full A0 briefing.
+
+---
+
+### user
+
+it's already done
+
+---
+
+### assistant
+
+I'll verify A0 against the sequence so we know the next step is actually next.
+
+_Tools: Shell, Read_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+**#1 A0 is done.** I checked it rather than taking it on trust.
+
+- Repo exists, commit `c593468` (`Initial commit`)
+- Tracked files are only the starter package plus `.gitignore` and `.gitattributes`
+- `local-docs/` and `.cursor/` show as ignored, not staged
+- Audit: 5/5 pass, 16/16 baseline tests intact
+
+Next in the sequence is **#2 Q1** — the clarifying email to oz@benoz.ai. Type **continue** for the briefing before anything is sent.
+
+---
+
+### user
+
+Why clarifying email needed to client? and if we done for each mini task it should be marked as done, or blocked why?
+
+---
+
+### assistant
+
+The email is not a code blocker — I'll explain why it's on the list, then add a status board so each mini-task is marked done or blocked with a reason.
+
+_Tools: Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+The clarifying email is **not needed to build anything**. It is on the list because the brief says asking is part of the exercise, not because the starter package is incomplete.
+
+The three questions we had queued are already answered by what they gave you:
+
+- The call shape is already `validateRecord(definition, record) → { valid, errors }` in their README and `lib/validate.js`.
+- Custom fields are just more named fields. A generic library does not care.
+- Repo visibility is process. Default to a **public** repo so they can open it with no login, same as the page.
+
+Sending those would look like asking things they already wrote down. The brief penalizes padding. **Skip Q1** unless you actually need a private repo.
+
+A status board is now at the top of [`local-docs/SEQUENCE.md`](local-docs/SEQUENCE.md). After every task it gets **done** (with evidence) or **blocked** (with why). Never left pending if finished.
+
+| # | ID | Status |
+|---|---|---|
+| 1 | A0 | **done** — commit `c593468`, ignored folders confirmed, audit 5/5 |
+| 2 | Q1 | pending — optional; skip with a recorded reason if you do not send |
+| 3+ | … | pending |
+
+If you skip Q1, say so and I will mark it `skipped` with that reason. Next real work is then **#3 B7-start** (start saving chat links) and **#4 A1** (empty `lib/rules.js`). Type **continue** when you want the briefing for whichever you pick.
+
+---
+
+### user
+
+it is not skip, delete that
+
+---
+
+### assistant
+
+I'll remove Q1 from the sequence and task list entirely, not mark it skipped.
+
+_Tools: Read, Grep_
+
+---
+
+### assistant
+
+
+_Tools: Read, Grep_
+
+---
+
+### assistant
+
+
+_Tools: Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: Write, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace_
+
+---
+
+### assistant
+
+Q1 is **deleted**, not skipped. It is gone from [`SEQUENCE.md`](local-docs/SEQUENCE.md), [`TASKS.md`](local-docs/TASKS.md), and [`INSTRUCTIONS.md`](local-docs/INSTRUCTIONS.md). No skip row, no “optional email” section.
+
+The sequence is now 23 steps. The only remaining email to oz@benoz.ai is **C5** — send the finished page URL.
+
+| # | ID | Status |
+|---|---|---|
+| 1 | A0 | **done** |
+| 2 | B7-start | pending — **next** |
+| 3 | A1 | pending |
+
+Type **continue** for the B7-start briefing.
+
+---
+
+### user
+
+first explain what is B7-start
+
+---
+
+### assistant
+
+
+_Tools: Read, Read_
+
+---
+
+### assistant
+
+**B7-start** is not writing Part 4. It is only starting the log so Part 4 is possible later.
+
+The brief requires **real AI conversations** on the submission page — share links, exports, or pasted transcripts. A summary of “how I used AI” does not count. Those chats cannot be rebuilt on Thursday if you never saved them.
+
+So the sequence splits B7 in two:
+
+| When | What |
+|---|---|
+| **Now (#2 B7-start)** | Open a note. Every time you use a chat (this one included), drop the share link or export into that note. One line per chat: date, tool/model, what it was for. |
+| **Thursday (#18 B7)** | Write the three notes (what you used, what you rejected, where tools helped least) and paste those saved links onto the page. |
+
+**What it is not:** no `lib/` changes, no tests, no email, no prose for the page. Code work (A1) can start as soon as this log exists.
+
+**What you do vs what I would do:** this is yours. I cannot share Cursor chats for you. You create something like `local-docs/transcripts.md` (it stays gitignored) and keep adding links as we go. I can create the empty file if you want; you have to fill the URLs.
+
+**Done when:** that running list exists, even if it only has this conversation so far.
+
+Say **do it** if you want me to create the empty log file, or tell me you’ll keep the list yourself. I will not start A1 until you confirm.
+
+---
+
+### user
+
+Let's do B7-start, but important is just normal writing is not, everytime it should writedown what I wantted to do, and what I have done in sensible notes.
+For example, If I type continue then the transaction should not just 'continue'. It should findout correct meaning what I am doing.
+
+---
+
+### assistant
+
+The log should capture intent and outcome, not the raw word “continue.” I’ll check the sequence file, then propose how that journal will work.
+
+_Tools: Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: CreatePlan_
+
+---
+
+### user
+
+B7-start: intent/outcome journal
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+### assistant
+
+I'll implement the journal, the always-on rule, and the sequence update, starting with the journal file.
+
+_Tools: TodoWrite, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: Write, Write_
+
+---
+
+### assistant
+
+
+_Tools: TodoWrite, StrReplace, StrReplace, StrReplace, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: TodoWrite_
+
+---
+
+### assistant
+
+**#2 B7-start is done.** The journal records intent and outcome, not the raw command.
+
+| Wanted | Done |
+|---|---|
+| A log of what you meant and what happened | [`local-docs/JOURNAL.md`](local-docs/JOURNAL.md) seeded with A0, Q1 removed, and this step |
+| `continue` must mean the next sequence step | Always-on rule [`.cursor/rules/work-journal.mdc`](.cursor/rules/work-journal.mdc) |
+| Keep doing this after every task | Mini-task-audit skill now ends with a journal entry; SEQUENCE board marked **done** |
+
+Seeded entries:
+
+- **A0** — lock git baseline; commit `c593468`, ignored folders, audit 5/5
+- **Q1 removed** — no clarifying email; step deleted, not skipped
+- **B7-start** — this journal and rule
+
+From here, `continue` means **brief #3 A1** (empty `lib/rules.js`, do not touch `validate.js`). I will not start A1 until you say **continue**, then **do it**.
+
+---
+
+### user
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief **#3 A1** — I will explain that step and wait; I will not write any library code yet.
+
+_Tools: Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #3 A1**, not run it. Next pending step after B7-start is **A1 — empty rules module**.
+
+## What A1 is
+
+A deliberately empty file so later bugs cannot hide in plumbing. We add `lib/rules.js` that exports one function and **does nothing**. We do **not** import it from `validate.js`. All 16 existing tests must still pass exactly as they do today.
+
+The function signature we will freeze for A2–A6:
+
+```js
+evaluateRules(definition, record, fieldErrors) → []
+```
+
+- `definition` — the same object `validateRecord` already takes
+- `record` — submitted values
+- `fieldErrors` — per-field errors already found (unused until A4/A6)
+- return value — always an empty array for this step
+
+## Files
+
+| May touch | Must not touch |
+|---|---|
+| `lib/rules.js` (new only) | `lib/validate.js`, `test/`, `clients/`, `README.md` |
+
+`package.json` still runs only `test/validate.test.js`. That is correct for A1: no new tests yet, because there is no behavior yet.
+
+## Why this exists
+
+A6 is the risky task (wiring into `validateRecord`). If we write logic and wire it in the same change, a failure could be the algorithm, the import, or the contract. A1 proves “a new file can exist and the audit stays green.” A2–A5 then add logic in isolation. A6 only connects it.
+
+## Gate
+
+- `node local-docs/audit.js` exits 0
+- still 16 tests, all by name
+- `validateRecord` still arity 2
+- a definition with no `rules` still behaves as today
+
+## I will not do until you confirm
+
+I will not create `lib/rules.js` until you say **do it**. If you want a different export name or you want A1 to also add a tiny load test, say so first.
+
+Journal: this turn is logged as **#3 A1 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+`do it` means execute **#3 A1**: add an unwired empty `evaluateRules` module, then audit and stop.
+
+_Tools: Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: Write_
+
+---
+
+### assistant
+
+
+_Tools: Shell, ReadLints_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, Shell_
+
+---
+
+### assistant
+
+**#3 A1 is done.** `do it` meant: create the empty rules module and leave `validate.js` alone.
+
+| Wanted | Done |
+|---|---|
+| Unwired `evaluateRules` stub | [`lib/rules.js`](lib/rules.js) exports `evaluateRules(definition, record, fieldErrors)` and returns `[]` |
+| Do not change validation behavior | `validate.js` not imported and not modified. Git shows only `?? lib/rules.js` |
+| Audit still green | 5/5 pass, 16/16 baseline tests, contract arity 2 |
+
+I did not start A2. Next is **#4 A2** (operand resolution: `{ "field": "x" }` vs `{ "value": 5 }`). Type **continue** for that briefing.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief **#4 A2** (operand resolution). I’ll read the task definition and explain it; I won’t change `lib/` until you confirm.
+
+_Tools: Read, Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #4 A2**, not run it. Next pending step is **operand resolution**.
+
+## What A2 is
+
+Teach the library the difference between “look up a field” and “use this literal.” That is the place a blind rule author is most likely to get wrong. A bare string like `"start"` must **not** be treated as a field name.
+
+Operands will only be these two shapes:
+
+```json
+{ "field": "end_date" }
+{ "value": 5 }
+```
+
+## What I would add
+
+**Files (exactly two):** [`lib/rules.js`](lib/rules.js), `test/rules.test.js` (new)
+
+Export `resolveOperand(operand, record, definition)` from `rules.js`. `evaluateRules` stays a stub that returns `[]`. Still **not** imported by `validate.js`.
+
+Return shape so callers can tell missing from falsy:
+
+| Operand | Result |
+|---|---|
+| `{ "value": 5 }` | `{ ok: true, present: true, value: 5 }` |
+| `{ "value": 0 }` or `{ "value": false }` | present, that value (falsy is still present) |
+| `{ "field": "x" }` and record has `"x": "hello"` | present, `"hello"` |
+| `{ "field": "x" }` and record has `"x": ""` | `{ ok: true, present: false, value: undefined }` — empty string is absent, same idea as `isPresent` in `validate.js` |
+| `{ "field": "x" }` and key missing / null | `{ ok: true, present: false, value: undefined }` |
+| `{ "field": "nope" }` and `nope` is not in `definition.fields` | `{ ok: false, error: "unknown_field" }` — not silent absence |
+| `"x"` or `{ "foo": 1 }` (neither shape) | `{ ok: false, error: "invalid_operand" }` |
+
+Unknown field is loud here so A5 does not have to invent a third meaning of “missing.”
+
+## Tests (same task)
+
+- literal number / string / `0` / `false`
+- field present
+- field empty string → not present
+- field absent
+- neither shape (bare string)
+- field name not in the definition
+
+No client field names in `lib/` or in the generic tests. Use names like `start` / `end`.
+
+## `npm test` vs the audit
+
+[`package.json`](package.json) still runs only `test/validate.test.js`. The audit already runs every `test/*.test.js`, so A2 is gated. Changing `package.json` would be a third file. I would leave it until A6 unless you want it updated now.
+
+## I will not do until you confirm
+
+I will not edit `lib/rules.js` until you say **do it**. If empty string should count as present (`value: ""`) instead of aligning with `isPresent`, say so now.
+
+Journal: this turn is **#4 A2 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+`do it` means execute **#4 A2** as briefed. I’ll lock that into a short implementation plan so we can run it without changing the agreed design.
+
+_Tools: Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: CreatePlan_
+
+---
+
+### user
+
+A2 — Operand resolution
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+### assistant
+
+I'll implement A2 as specified: `resolveOperand` plus tests, then audit and update the journal.
+
+_Tools: TodoWrite, Shell, Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: Write, Write_
+
+---
+
+### assistant
+
+
+_Tools: TodoWrite, Shell, ReadLints_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, Shell_
+
+---
+
+### assistant
+
+
+_Tools: TodoWrite_
+
+---
+
+### assistant
+
+**#4 A2 is done.** Operand resolution is in place; `validate.js` is unchanged.
+
+| Wanted | Done |
+|---|---|
+| `{ "field" }` vs `{ "value" }`, never a bare string | `resolveOperand` in [`lib/rules.js`](lib/rules.js) |
+| Absent vs falsy | Empty string / null / missing → `present: false`; `0` and `false` stay present |
+| Unknown field is loud | `{ ok: false, error: "unknown_field" }` |
+| Tests in the same change | [`test/rules.test.js`](test/rules.test.js) |
+| Stub still stub | `evaluateRules` still returns `[]` |
+
+Audit: **5/5**, 28 tests passing (16 baseline + 12 new). Git shows only `lib/rules.js` and `test/rules.test.js`.
+
+I did not start A3. Next is **#5 A3** (comparison operators). Type **continue** for that briefing.
+
+---
+
+### user
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief the next pending step. I’ll check the sequence board, then explain that step without writing operator code.
+
+_Tools: Read, Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #5 A3**, not run it. A2 is already done. Next is **comparison operators**.
+
+## What A3 is
+
+Pure compare functions. No wiring into `validateRecord`. `evaluateRules` still returns `[]`. Still two files: [`lib/rules.js`](lib/rules.js) and [`test/rules.test.js`](test/rules.test.js).
+
+Export `compare(left, op, right)` that takes **already-resolved values** (numbers, strings, booleans), not operands. A2 already resolved `{ field }` / `{ value }`. Mixing those here would re-test presence.
+
+Operators: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`.
+
+## Type semantics I would lock now
+
+| Types | Allowed ops | How |
+|---|---|---|
+| two numbers | all six | numeric (`10 &gt; 9`) |
+| two `YYYY-MM-DD` strings | all six | lexicographic, which matches calendar order (`2026-12-31` &lt; `2027-01-01`) |
+| two booleans | `eq`, `neq` only | strict equality |
+| anything else, including `"10"` vs `9` | none | not JS coercion |
+
+Mismatch and illegal ordering (boolean `gt`, number vs string, unknown `op`) return `{ ok: false, error: "type_mismatch" }` or `{ ok: false, error: "unknown_op" }` — **not** `false`. A silent `false` looks like “rule failed” and hides a bad comparison. Same idea as unknown fields in A2.
+
+Legal compare: `{ ok: true, matched: true|false }`.
+
+## Tests (same task)
+
+- each operator true and false on numbers
+- `gte` / `lte` when equal
+- dates across a year boundary
+- `"10"` vs `9` → `type_mismatch`, not true
+- `true` `gt` `false` → not a boolean ordering
+- unknown operator → `unknown_op`
+
+Existing A2 tests must still pass. `validate.js` stays untouched.
+
+## I will not do until you confirm
+
+I will not edit `lib/rules.js` until you say **do it**. If you want mismatched types to count as “rule not matched” (`matched: false`) instead of a loud error, say so now — that is the one decision A3 is for.
+
+Journal: this turn is **#5 A3 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+
+_Tools: CreatePlan_
+
+---
+
+### user
+
+A3 — Comparison operators
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+### assistant
+
+I'll implement A3 as specified: `compare(left, op, right)`, tests, then audit and journal.
+
+_Tools: TodoWrite, Shell, Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Write, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: TodoWrite, Shell, ReadLints_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, Shell_
+
+---
+
+### assistant
+
+
+_Tools: TodoWrite_
+
+---
+
+### assistant
+
+**#5 A3 is done.** Comparison operators are locked; `validate.js` is unchanged.
+
+| Wanted | Done |
+|---|---|
+| Numbers, dates, booleans with no JS coercion | `compare(left, op, right)` in [`lib/rules.js`](lib/rules.js) |
+| `"10"` vs `9` must not be true | `{ ok: false, error: "type_mismatch" }` |
+| Boolean `gt` is illegal | `type_mismatch` |
+| Unknown operator is loud | `{ ok: false, error: "unknown_op" }` |
+| Stub still stub | `evaluateRules` still returns `[]` |
+
+Audit: **5/5**, 38 tests passing (16 baseline intact). Git shows only `lib/rules.js` and `test/rules.test.js`.
+
+I did not start A4. Next is **#6 A4** (skip a rule when a dependency is missing or already failed per-field validation). Type **continue** for that briefing.
+
+---
+
+### user
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief the next pending step. A3 is already done, so I’ll explain **#6 A4** and wait — no code until you confirm.
+
+_Tools: Read, Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #6 A4**, not run it. A3 is already done. Next is the **dependency state gate**: decide whether a rule runs at all.
+
+## What A4 is
+
+A rule like “end ≥ start” must not fire when `start` is missing or already failed its own type check. Otherwise you get two errors for one mistake, and test 11 (`15/01/2027`) would grow a second error later.
+
+This step only adds the gate. Still **not** wired into `validate.js`. `evaluateRules` still returns `[]`.
+
+## What I would add
+
+**Files:** [`lib/rules.js`](lib/rules.js), [`test/rules.test.js`](test/rules.test.js)
+
+Export `shouldEvaluateRule(rule, record, definition, fieldErrors)`:
+
+| Situation | Result |
+|---|---|
+| Both field operands present, and neither name is in `fieldErrors` | `{ run: true }` |
+| A `{ "field" }` operand is absent / empty (A2 `present: false`) | `{ run: false, reason: "missing_dependency" }` |
+| A referenced field already has a per-field error (malformed date, bad type) | `{ run: false, reason: "invalid_dependency" }` |
+| Operand is a `{ "value" }` literal | not a dependency; ignored by the gate |
+
+`fieldErrors` is the same `{ field, message }[]` that `validateRecord` already builds. The gate does not re-validate types; it trusts that list.
+
+Unknown field / bad operand shape is **not** a skip. That is A5 (loud malformed rule). A4 only skips real, named dependencies that are missing or already invalid.
+
+## Tests (same task)
+
+- optional field absent → `missing_dependency`
+- required field absent, `fieldErrors` already has the required error → skip (so A6 will not add a second error)
+- field present but listed in `fieldErrors` (the `15/01/2027` case) → `invalid_dependency`
+- both dates present, no field errors → `run: true`
+
+The “exactly one error, not two” claim is fully proven at A6/A7. A4 only proves the gate would skip.
+
+## I will not do until you confirm
+
+I will not edit `lib/rules.js` until you say **do it**. If you want a missing required field to fail the rule instead of skip, say so now — that would fight test 11 later.
+
+Journal: this turn is **#6 A4 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+`do it` means execute **#6 A4**: add the dependency skip gate, test it, then audit and stop.
+
+_Tools: Shell, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, Shell_
+
+---
+
+### assistant
+
+**#6 A4 is done.** Rules now skip when a dependency is missing or already invalid. `validate.js` is unchanged.
+
+| Wanted | Done |
+|---|---|
+| Don’t run a rule if a field operand is absent | `shouldEvaluateRule` → `{ run: false, reason: "missing_dependency" }` |
+| Don’t run if that field already failed per-field checks | `{ run: false, reason: "invalid_dependency" }` |
+| Literals are not dependencies | `{ value: 0 }` is ignored by the gate |
+| Stub still stub | `evaluateRules` still returns `[]` |
+
+Audit: **5/5**, 43 tests passing, 16/16 baseline intact. Git shows only `lib/rules.js` and `test/rules.test.js`.
+
+I did not start A5. Next is **#7 A5** (malformed rules fail loudly: unknown op, unknown field, missing `target`/`message`). Type **continue** for that briefing.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief **#7 A5** (malformed rules). I’ll read the task and explain it; no library changes until you confirm.
+
+_Tools: Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #7 A5**, not run it. Next is **malformed rule handling**. This is also the last step that may edit `lib/rules.js`.
+
+## Why A5 is bigger than it looks
+
+A6 may touch only `lib/validate.js` and tests. So **`evaluateRules` has to stop being a stub in A5**. Otherwise A6 has nothing to call.
+
+A silent pass on a broken rule is the worst failure: in the blind test it looks identical to a correct pass.
+
+## What I would add
+
+**Files:** [`lib/rules.js`](lib/rules.js), [`test/rules.test.js`](test/rules.test.js). Not `validate.js`.
+
+`evaluateRules(definition, record, fieldErrors)`:
+
+1. No `rules` key, or empty array → `[]` (backwards compatible).
+2. Each rule, in order:
+   - **Malformed** → one `{ field, message }`, then next rule (do not skip the rest of the list).
+   - `shouldEvaluateRule` says skip → no error from this rule.
+   - Resolve both operands, `compare`, if `matched === false` → error on `target` with `message`.
+   - If `compare` itself fails (`unknown_op`, `type_mismatch`) → same as malformed: loud error, not a skip.
+
+Malformed shapes (each gets its own test):
+
+| Break | Error |
+|---|---|
+| unknown `op` | loud |
+| `{ "field": "nope" }` not in the definition | loud |
+| missing `target` | loud |
+| missing `message` | loud |
+| invalid operand shape (bare string, etc.) | loud |
+
+Which `field` the error attaches to: `target` if it is a non-empty string, otherwise `id`, otherwise `"_rule"`. Graders still get a `{ field, message }` object.
+
+The existing stub test (“evaluateRules is still a stub”) will be **replaced**: a well-formed rule that is satisfied still returns `[]`; that is the new “no behavior change when valid” check.
+
+## I will not do until you confirm
+
+I will not fill in `evaluateRules` until you say **do it**. If you want A5 to only add `inspectRule` and leave the stub, say so — but then A6 would have to edit `rules.js`, which breaks the two-file split.
+
+Journal: this turn is **#7 A5 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+`do it` means execute **#7 A5**: make `evaluateRules` real, fail malformed rules loudly, then audit and stop.
+
+_Tools: Read, Read, Read, Read, Shell_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Read_
+
+---
+
+### assistant
+
+
+_Tools: Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, Shell_
+
+---
+
+### assistant
+
+**#7 A5 is done.** `evaluateRules` is no longer a stub. `validate.js` is unchanged.
+
+| Wanted | Done |
+|---|---|
+| Broken rules fail loudly | Unknown op, unknown field, missing `target`/`message`, invalid operand each emit `{ field, message }` |
+| Missing deps still skip | No extra error when a field is absent |
+| Real compare path | Failed compare uses `target` and `message`; satisfied rule returns `[]` |
+| A6 can wire without editing `rules.js` | `evaluateRules` is complete |
+
+Audit: **5/5**, 51 tests passing, 16/16 baseline intact. Git shows only `lib/rules.js` and `test/rules.test.js`.
+
+I did not start A6. Next is **#8 A6** (import `evaluateRules` at the end of `validateRecord`). Type **continue** for that briefing.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief **#8 A6** (wire into `validateRecord`). I’ll read the current validate path and explain the change without editing it.
+
+_Tools: Read, Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #8 A6**, not run it. This is the first time `validate.js` changes. `rules.js` stays frozen.
+
+## What A6 is
+
+After the existing per-field loop, call `evaluateRules` and append its errors. Two-pass so the gate from A4 can see which fields already failed.
+
+```js
+const { evaluateRules } = require("./rules");
+// ... existing per-field loop fills `errors` ...
+errors.push(...evaluateRules(definition, record, errors));
+return { valid: errors.length === 0, errors };
+```
+
+Pass the **same** `errors` array as `fieldErrors` *before* appending. If you merge first, a rule error could look like a per-field failure for the next rule.
+
+No `rules` key → `evaluateRules` returns `[]` → identical to today. That is audit gates 4 and 5.
+
+## Files
+
+| Touch | Do not touch |
+|---|---|
+| [`lib/validate.js`](lib/validate.js), [`test/rules.test.js`](test/rules.test.js) | `lib/rules.js`, `clients/`, `package.json` |
+
+Client B’s date rule is **A7**, not this step. Wiring with no fixture rule still proves the 16 baseline tests.
+
+## Tests to add (through `validateRecord`, generic fields)
+
+- definition with no `rules` still validates as today
+- well-formed rule, dates in order → `valid: true`
+- well-formed rule, end before start → error on `target`
+- start is `15/01/2027` → only the per-field date error, no second rule error
+- start omitted and required → only the required error
+
+Update the comment on `validateRecord` that still says “per-field validation only.”
+
+## I will not do until you confirm
+
+I will not edit `validate.js` until you say **do it**. I will not add the Client B fixture rule in this step.
+
+Journal: this turn is **#8 A6 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+`do it` means execute **#8 A6**: wire `evaluateRules` into `validateRecord` after per-field checks, then audit and stop.
+
+_Tools: Read, Read, Shell_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, Shell_
+
+---
+
+### assistant
+
+**#8 A6 is done.** Cross-field rules now run through `validateRecord`. `lib/rules.js` was not edited in this step.
+
+| Wanted | Done |
+|---|---|
+| Per-field first, then rules | [`lib/validate.js`](lib/validate.js) appends `evaluateRules(definition, record, errors)` after the existing loop |
+| No `rules` key behaves as before | Audit gate 5 still passes |
+| Malformed date does not get a second error | Covered through `validateRecord` in [`test/rules.test.js`](test/rules.test.js) |
+| Missing required field is only the required error | Same |
+
+Audit: **5/5**, 56 tests passing, 16/16 baseline intact, contract arity 2.
+
+I did not add the Client B fixture rule. That is **#9 A7**. Type **continue** for that briefing.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+
+_Tools: Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #9 A7**, not run it. Next is the **real Client B date rule** in the fixture. `lib/` stays frozen.
+
+## What A7 is
+
+Put the brief’s example into data: project end date must not be before project start date. The library already knows how. This step only **declares** the rule.
+
+## What I would add
+
+**Files:** [`clients/client-b-grant-foundation.json`](clients/client-b-grant-foundation.json), [`test/rules.test.js`](test/rules.test.js)
+
+A sibling `rules` array on the Client B definition:
+
+```json
+"rules": [
+  {
+    "id": "end_not_before_start",
+    "left":  { "field": "project_end_date" },
+    "op":    "gte",
+    "right": { "field": "project_start_date" },
+    "target": "project_end_date",
+    "message": "Project end date must not be before project start date"
+  }
+]
+```
+
+Those field names belong in the **fixture and tests**, not in `lib/`.
+
+**Must stay green (do not edit these tests unless they fail, and if they fail, stop):**
+
+- Test 7: valid Client B record, start `2027-01-15`, end `2027-12-15` → still `valid: true`
+- Test 11: start `15/01/2027` → still fails on `project_start_date` only; **no** extra error on `project_end_date`
+
+That is the live proof of A4.
+
+**New test** in `rules.test.js`: load Client B, swap the dates so end is before start, assert `valid: false` and an error on `project_end_date`. That is the happy-path-of-failure the baseline suite does not have.
+
+Do not change `lib/rules.js`, `lib/validate.js`, or `test/validate.test.js` unless a baseline test actually breaks.
+
+## I will not do until you confirm
+
+I will not edit the Client B JSON until you say **do it**.
+
+Journal: this turn is **#9 A7 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+`do it` means execute **#9 A7**: add the Client B end-not-before-start rule, prove tests 7 and 11 still pass, then stop.
+
+_Tools: Read, Read, Read, Read, Shell_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, Shell_
+
+---
+
+### assistant
+
+**#9 A7 is done.** The brief’s date rule is now data on Client B. No existing test was changed.
+
+| Wanted | Done |
+|---|---|
+| End not before start, as data | [`clients/client-b-grant-foundation.json`](clients/client-b-grant-foundation.json) `rules` array with `gte` on `project_end_date` vs `project_start_date` |
+| Test 7 still passes | Valid dates `2027-01-15` / `2027-12-15` still `valid: true` |
+| Test 11 still one error | Malformed `15/01/2027` does not add a `project_end_date` rule error |
+| Prove the violation | New test: swapped dates fail on `project_end_date` |
+
+Audit: **5/5**, 58 tests, 16/16 baseline intact. `lib/` was not edited in this step.
+
+I did not start A8. Next is **#10 A8** (rewrite `README.md` as the spec the graders will follow). Type **continue** for that briefing.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+
+_Tools: Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #10 A8**, not run it. Next is rewriting [`README.md`](README.md) as the spec the graders will follow. One file only. No `lib/` changes.
+
+## What A8 is
+
+This is the Part 2 graded artifact. After you submit, they will write a cross-field rule for a client you have never seen **using only this README**. If the README is vague, the code can be correct and you still fail.
+
+Replace the “The task” section (keep the layout, how to run, per-field types). Write what the format **is**, not what we were asked to invent.
+
+## What I would put in the README
+
+1. **`rules` array** as a sibling of `fields`. Each rule: `id` (optional), `left`, `op`, `right`, `target` (required), `message` (required).
+2. **Operands** are only `{ "field": "name" }` or `{ "value": literal }`. A bare string is invalid.
+3. **Worked example** — the Client B rule already in the fixture, copied in full.
+4. **Operators:** `eq`, `neq`, `gt`, `gte`, `lt`, `lte`. Numbers numeric; `YYYY-MM-DD` lexicographic; booleans `eq`/`neq` only. `"10"` vs `9` is a loud type mismatch, not JS coercion.
+5. **The six decisions, with why:**
+   - field vs literal objects
+   - error attaches to required `target` (not both fields)
+   - missing dependency: skip (required is already a per-field error)
+   - invalid dependency: skip (no second error on `15/01/2027`)
+   - malformed rule: loud error, never a silent pass
+   - stop: no arithmetic, no boolean trees, no expressions
+6. **Evaluation order:** all per-field checks, then rules. No `rules` key = unchanged.
+7. **What it cannot express** (explicit): “end is start plus 14 days”, “if status is X then Y is required”, nested AND/OR, comparing non-date strings with `gt`.
+8. **Existing tests:** none were changed.
+9. **How to run the full suite:** `node --test test/` (because `npm test` still only runs `validate.test.js`).
+
+A8 does not add the missing “two rules, same target” test. If you want that, say so; it would be extra tests, not README-only.
+
+## I will not do until you confirm
+
+I will not rewrite `README.md` until you say **do it**. The prose should match the code we actually shipped, including skip-on-missing and loud malformed rules.
+
+Journal: this turn is **#10 A8 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+`do it` means execute **#10 A8**: rewrite `README.md` as the spec the graders will follow, matching the code we actually shipped.
+
+_Tools: Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: Write_
+
+---
+
+### assistant
+
+
+_Tools: Shell, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+**#10 A8 is done.** [`README.md`](README.md) is now the spec, not the original task prompt.
+
+| Wanted | Done |
+|---|---|
+| A stranger can write a rule without opening `lib/` | Operands, operators, evaluation order, skip vs loud-fail, and a full Client B example |
+| The six decisions, with why | Field vs literal, required `target`, skip missing/invalid deps, malformed is loud, where we stopped |
+| Explicit non-goals | No arithmetic, no conditional required-ness, no AND/OR trees, no `gt` on arbitrary strings |
+| How to run tests | `node --test test/` for the full suite |
+
+Audit still **5/5**. `lib/` was not changed.
+
+I did not start A9. Next is **#11 A9** (write a rule for an invented client using only the README, then delete the scratch file). Type **continue** for that briefing.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+
+_Tools: Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #11 A9**, not run it. Next is **blind-author verification**: simulate the graders.
+
+## What A9 is
+
+Write a definition and a cross-field rule for a client that is **not** in the brief, using **only** [`README.md`](README.md). Do not open `lib/` while writing the rule. Run it through `validateRecord`. If behaviour disagrees with the README, the README is wrong — fix the README and repeat. Then **delete** the scratch file. It must not ship.
+
+## What I would do (after you say do it)
+
+Invent something unlike A/B/C, for example a **library hold**: `hold_start`, `hold_end`, `max_days` (number). Rule from the README:
+
+```json
+{
+  "left": { "field": "hold_end" },
+  "op": "gte",
+  "right": { "field": "hold_start" },
+  "target": "hold_end",
+  "message": "Hold end must not be before hold start"
+}
+```
+
+Scratch at `local-docs/a9-blind-check.js` (gitignored with the rest of `local-docs/`). It would assert, from the README:
+
+- in-order dates → valid
+- end before start → error on `hold_end`
+- missing `hold_start` → no rule error (skip)
+- no `rules` key → still valid
+
+Then delete the scratch file and run the audit. `lib/` stays closed unless the README was wrong.
+
+## I will not do until you confirm
+
+I will not create the scratch file until you say **do it**. If you want a different invented client (not library holds), say so now.
+
+Journal: this turn is **#11 A9 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+`do it` means execute **#11 A9**: write a rule from the README only, run it, then delete the scratch file.
+
+_Tools: Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: Write_
+
+---
+
+### assistant
+
+
+_Tools: Shell_
+
+---
+
+### assistant
+
+
+_Tools: Delete, Shell_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+**#11 A9 is done.** Track A (the library) is closed.
+
+| Wanted | Done |
+|---|---|
+| Rule written from README only | Invented a **library hold** (`hold_start`, `hold_end`, `max_days`) — not A/B/C |
+| Matches the spec | In-order valid; end-before-start errors on `hold_end`; `max_days &gt; 30` errors on `max_days`; missing/malformed start skips the date rule; no `rules` key still valid; unknown `op` is loud |
+| Scratch does not ship | `local-docs/a9-blind-check.js` ran, then was deleted |
+| README vs code | No disagreement — README was not changed. `lib/` was not reopened |
+
+Audit still **5/5**.
+
+I did not start Track B. Next is **#12 B1** (Part 1 handover defects). Type **continue** for that briefing.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+
+_Tools: Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #12 B1**, not run it. Track A is closed. Next is **Part 1: defects only**. Not the “actually fine” items (B2) and not the fix-first paragraph (B3).
+
+## What B1 is
+
+A draft review of [`review/handover-architecture.md`](review/handover-architecture.md). For each finding: the problem, what goes wrong in practice, **critical / serious / minor**, and what you would do. Each finding must name its **handover section**.
+
+This is a draft in `local-docs/` (gitignored). It is not the submission page. You rewrite it in your own voice before it goes public — there is a follow-up interview.
+
+## Findings I would draft (from the handover, not from memory)
+
+| Finding | Section | Severity |
+|---|---|---|
+| `SET app.current_tenant` without `LOCAL` leaks across a pooled connection; stale tenant is fail-open | §1 | critical |
+| Tenant id interpolated into SQL | §1 | critical |
+| `audit_log` has no `tenant_id`, no RLS; `payload` can hold Client C clinical data | §1 | critical (legal) |
+| SMS/email inline in create, blocking the 201; contradicts the outbox in §6 | §4 | serious |
+| `listRecords` interpolates `${table}` and `SELECT *` (clinical notes to every role) | §5 | serious / critical |
+| Offset pagination on non-unique `created_at`; global index, unvalidated `limit` | §5 | serious |
+| Outbox handlers dedupe on `(event_type, entity_id)` so a second real `status_changed` is dropped | §6 | serious |
+
+I would not pad with the contractor’s own “didn’t get to” list (rate limits, search) unless one of them is clearly worse than the seven above. Short and honest scores higher.
+
+## Files
+
+**Touch:** `local-docs/draft-part1.md` (create). **Do not touch:** `lib/`, `README.md`, the page.
+
+## I will not do until you confirm
+
+I will not write the draft until you say **do it**. If you want a finding dropped or a severity changed, say so now.
+
+Journal: this turn is **#12 B1 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+`do it` means execute **#12 B1**: draft the handover defects into `local-docs/draft-part1.md`, cite each section, then stop.
+
+_Tools: Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: Write_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+**#12 B1 is done.** Defects only are in [`local-docs/draft-part1.md`](local-docs/draft-part1.md) (gitignored). This is a draft — rewrite it in your own voice before it goes on the page.
+
+| # | Finding | Section | Severity |
+|---|---|---|---|
+| 1 | Stale `SET` tenant on pooled connections | §1 | critical |
+| 2 | Tenant id concatenated into SQL | §1 | critical |
+| 3 | `audit_log` has no `tenant_id` / RLS | §1 | critical (legal) |
+| 4 | SMS/email inline on create | §4 | serious |
+| 5 | `${table}` and `SELECT *` on list | §5 | serious / critical |
+| 6 | Offset pagination on `created_at` | §5 | serious |
+| 7 | Outbox dedupe drops real status changes | §6 | serious |
+
+I did not add the contractor’s “didn’t get to” list. I did not write B2 (things that are actually fine) or B3 (what to fix first).
+
+Next is **#13 B2**. Type **continue** for that briefing.
+
+---
+
+### user
+
+continue
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+
+_Tools: Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #13 B2**, not run it. Next is the part of Part 1 the brief weights as highly as real defects: **things that look wrong but are actually correct**.
+
+## What B2 is
+
+Append a section to [`local-docs/draft-part1.md`](local-docs/draft-part1.md). Each item: why it looks suspicious, why it is not a defect. Still a draft you rewrite in your own voice. Not B3 (fix-first).
+
+## Items I would write
+
+| Item | Section | Looks wrong | Why it is fine |
+|---|---|---|---|
+| Transactional outbox | §6 | Extra table, polling relay, “more moving parts than `await sendEmail`” | Write and enqueue in one transaction; relay marks dispatched only after broker ack; crash does not lose the event. The *idempotency key* in B1 is the bug; the outbox shape is not. |
+| `current_setting(..., true)` | §1 | Swallowing “missing GUC” looks like hiding failure | Missing key → NULL → RLS matches nothing. Unset is fail-closed. (Stale `SET` without `LOCAL` is still the leak in B1.) |
+| `custom_fields` JSONB + `field_definitions` | §3 / §7 | Looks like EAV / “schemaless mess” | Matches constant “one more field” requests without a migration. Per-tenant metadata is the right grain. |
+| `app_admin` bypasses RLS | §1 | Superuser-shaped hole | By design for migrations. Worth *checking* that `app_user` is not the table owner (`FORCE ROW LEVEL SECURITY` if it is) — that check is hygiene, not a finding that the role is wrong. |
+
+I would not praise §4’s inline SMS or §5’s `SELECT *`. Those are B1.
+
+## I will not do until you confirm
+
+I will not edit the draft until you say **do it**. If you want one of these dropped (especially the `app_admin` caveat), say so now.
+
+Journal: this turn is **#13 B2 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+Executing B2: appending the “looks wrong but is correct” section to the Part 1 draft. Checking SEQUENCE, the draft, and journal first.
+
+_Tools: Read, Read, Read, Read_
+
+---
+
+### assistant
+
+Checking the handover for exact wording on the four items so the draft cites the source.
+
+_Tools: Grep, Read, Read_
+
+---
+
+### assistant
+
+Appending the B2 section to the draft, then updating SEQUENCE and the journal. B2 is prose only, so I’m not running the code audit.
+
+_Tools: StrReplace, StrReplace, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+**B2 is done.** Four “looks wrong, is not” items are now in `local-docs/draft-part1.md`. Still a draft — rewrite in your voice before the page.
+
+| Item | Looks wrong | Why it is fine |
+|---|---|---|
+| **Transactional outbox** (§6) | Extra table, polling, DLQ | Write + enqueue in one txn; relay after broker ack; crash does not lose the event. The bug is the idempotency key, not the outbox. |
+| **`current_setting(..., true)`** (§1) | Swallowing a missing GUC | Unset → NULL → no rows. Fail-closed. The leak is a *stale* SET, not this flag. |
+| **JSONB + `field_definitions`** (§3 / §7) | EAV / schemaless | Matches “one more field” without a migration. Metadata is the schema; JSONB is the payload. |
+| **`app_admin` bypass** (§1) | Superuser-shaped hole | Migrations, not request path. Check that `app_user` does not own the tables (`FORCE ROW LEVEL SECURITY` if it does) — hygiene, not a finding against the role. |
+
+Did not praise §4 inline SMS or §5 `SELECT *`. Sequence #13 is **done**. Next pending is **B3** (fix-first paragraph); say **continue** when you want that briefed.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief the next pending step only. Checking SEQUENCE and B3 so the briefing matches the gate.
+
+_Tools: Read, Read, Read, Grep_
+
+---
+
+### assistant
+
+
+_Tools: Grep, Read_
+
+---
+
+### assistant
+
+
+_Tools: Grep, Grep, Read_
+
+---
+
+### assistant
+
+
+_Tools: Glob, Grep_
+
+---
+
+### assistant
+
+
+_Tools: Read, Grep_
+
+---
+
+### assistant
+
+
+_Tools: Grep, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #14 B3**, not run it. Next is **one paragraph: which defect you fix first, and why it comes before the others**.
+
+## What B3 is
+
+Append a short closing section to [`local-docs/draft-part1.md`](local-docs/draft-part1.md). Gate: it must **stand alone** (a reader who skips the findings still knows the order). Stop condition: a list of “all of these.” Still a draft you rewrite in your own voice. Not B4.
+
+## Paragraph I would write
+
+**Fix first: the stale tenant GUC on pooled connections** (finding 1 / handover §1).
+
+Why that, not a ranking of everything else:
+
+- It is **live**. Every request uses that `SET`. A stale connection is fail-open to the **wrong** tenant. Unset is fail-closed; stale is not.
+- **RLS is the only isolation.** Handlers do not filter by `tenant_id`. Until this GUC is trustworthy, list, create, audit, and outbox all run on the wrong tenant’s rows.
+- It is **cheap**: one call, `SELECT set_config('app.current_tenant', $1, true)` inside the request transaction. Finding 2 (string-built tenant id) is the **same three-line function**, so it ships in that same change — that is one first fix, not two priorities.
+
+Why not `audit_log` first: real legal exposure, but it does not swap Client C’s clinic records into Client A’s UI on the next pool checkout. Why not inline SMS or pagination: they hurt under load; they do not leak another tenant’s data.
+
+## I will not do until you confirm
+
+I will not edit the draft until you say **do it**. If you want `audit_log` as first instead (regulator / Client C), say so now.
+
+Journal: this turn is **#14 B3 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+Executing B3: appending the fix-first paragraph to the Part 1 draft, then updating SEQUENCE and the journal.
+
+_Tools: Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+**B3 is done.** The closing paragraph is in `local-docs/draft-part1.md`. Still a draft — rewrite in your voice before the page.
+
+**First fix:** the stale tenant GUC on pooled connections (`setTenantContext`). It is live on every request, fail-open to the wrong tenant, and RLS is the only isolation. The same one-line change (`set_config(..., true)` inside the request transaction) also removes the interpolated tenant id. `audit_log` and SMS/pagination are named only to show why they wait — not as a second ranking.
+
+Part 1 draft is complete (defects, “actually fine,” fix-first). Sequence #14 is **done**. Next pending is **B4** (isolation: one approach, name who you lose). Say **continue** when you want that briefed.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief the next pending step only. Checking B4 and the isolation decision so the briefing is one approach, not a hybrid.
+
+_Tools: Read, Read, Read, Grep, Read_
+
+---
+
+### assistant
+
+
+_Tools: Glob, Grep, Read_
+
+---
+
+### assistant
+
+
+_Tools: Read, Grep_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #15 B4**, not run it. Next is **Decision 1 — isolation**. A few paragraphs in a new `local-docs/draft-part3.md`. Gate: **one approach**, tradeoff named, **lost client named**. Hybrid scores **zero**. There is a follow-up interview: this has to be a position you actually hold.
+
+## The constraint (from the brief)
+
+Client C’s regulator: data never leaves infrastructure under the clinic’s own control. Client A: lowest cost and same-day setup. Fourth client unknown. Doing both is a zero.
+
+## Approach I would write: **pool**
+
+Keep one shared database and schema. Client differences stay configuration (the company thesis). Fix the GUC leak from Part 1 so RLS is actually trustworthy.
+
+**What you give up:** physical isolation. A regulator who requires clinic-controlled infrastructure cannot be satisfied by RLS, however correct.
+
+**Who you lose: Client C** (the private clinic), and any later client with the same requirement. You keep Client A’s cost and same-day onboarding, and you can still take the unknown fourth client if they look like A or B.
+
+**Why not silo:** dedicated databases for everyone abandon “differences are configuration,” kill same-day city setup, and make the fourth client a provisioning project before you know what they track.
+
+## Phrases that are hybrids (do not write these)
+
+- Silo the clinic, pool everyone else  
+- Dedicated DB as a paid flag / “when they ask”  
+- Schema-per-tenant for some  
+- “Start pool, migrate C later” as the platform approach  
+
+## Confirm before I write
+
+Say **do it** if you will defend pool / lose Client C in the interview.
+
+If you would rather **silo / lose Client A** (city cost and same-day setup), say that instead — I will write that, not a blend.
+
+Journal: this turn is **#15 B4 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+Executing B4: writing the isolation decision as pool, losing Client C — no hybrid. Then updating SEQUENCE and the journal.
+
+_Tools: Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: Write, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+**B4 is done.** Decision 1 is in `local-docs/draft-part3.md`. Still a draft — rewrite in your voice before the page.
+
+**Approach: pool** (one database, one schema, RLS). No silo path.
+
+**Who you lose: Client C**, and any later tenant whose regulator requires clinic-controlled infrastructure. Keep Client A’s cost and same-day setup. If the unknown fourth client is another clinic, decline them.
+
+The GUC fix from Part 1 is called out as making the pool actually isolate, not as a second model.
+
+Sequence #15 is **done**. Next pending is **B5** (eligibility score: where it lives, board revises, Client C wants something similar). Say **continue** when you want that briefed.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief the next pending step only. Checking B5 and the eligibility questions so the briefing covers all three.
+
+_Tools: Read, Read, Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #16 B5**, not run it. Next is **Decision 2 — eligibility score**. Append a few paragraphs to [`local-docs/draft-part3.md`](local-docs/draft-part3.md). Gate: all three questions. Stop if you answer “where it lives” but skip versioning or the snapshot.
+
+## The three questions (from the brief)
+
+1. Where does Client B’s formula live?  
+2. What happens when the board revises it (~once a year; weights also change each round)?  
+3. What happens when Client C asks for something similar but different?
+
+Formula inputs: registry API turnover, requested/turnover ratio, grants in the last five years (recency-weighted), thematic weights per round, auto-reject below threshold.
+
+## Answers I would write
+
+**Where it lives:** versioned **tenant configuration**, not application code. A generic scorer evaluates a formula document (inputs, weights, threshold). Hardcoding Client B in `lib/` or in a route is the opposite of the platform thesis.
+
+**Board revises:** publish a **new formula version**. Applications already scored keep the version they were judged under. A round pins a version (and that round’s weights/threshold). Re-scoring an in-flight application is an explicit action, not a silent rewrite of history.
+
+**Snapshot (easy to omit, and the gate):** at score time, persist the **registry turnover (and the other inputs)** next to the score. A later API change must not make last year’s auto-reject unreproducible.
+
+**Client C wants something similar:** same engine, **different definition** (e.g. a triage/priority formula). Not a clinic fork. Decision 1 still stands: we are not hosting the clinic — the brief still asks this, so treat it as the next tenant who wants a second score-shaped rule. One mechanism, many definitions.
+
+## I will not do until you confirm
+
+I will not edit the draft until you say **do it**. If you want the formula in code instead of config, say so now (that is a weaker platform answer).
+
+Journal: this turn is **#16 B5 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+Executing B5: appending the eligibility-score answers to the Part 3 draft, then updating SEQUENCE and the journal.
+
+_Tools: Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+**B5 is done.** Decision 2 is in `local-docs/draft-part3.md`. Still a draft — rewrite in your voice before the page.
+
+| Question | Answer |
+|---|---|
+| **Where it lives** | Versioned tenant config + a generic scorer, not Client B code |
+| **Board revises** | New formula version; already-scored applications keep the old one |
+| **Reproduce the decision** | Snapshot registry turnover (and the other inputs) with the score |
+| **Client C similar** | Same engine, different definition — not a clinic fork. Decision 1 unchanged (we are not hosting them) |
+
+Sequence #16 is **done**. Next pending is **B6** (what breaks first at 300 clients — one component). Say **continue** when you want that briefed.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+
+_Tools: Read, Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #17 B6**, not run it. Next is **Decision 3 — what breaks first at 300 clients**. Append a few paragraphs to [`local-docs/draft-part3.md`](local-docs/draft-part3.md). Gate: **exactly one component**, plus what you would see and what you would do. A second candidate smuggled in fails.
+
+## Component I would name
+
+The **global outbox table and its single polling relay** (handover §6). One unpublished queue, one process that drains it, shared by every tenant.
+
+At 3 clients it looks fine. At 300, a Client A storm (4,000 reports in an afternoon) dumps thousands of `status_changed` / SMS rows into the same table. The relay is one serialization point. Client B’s decision email and fourteen-day follow-up sit behind that backlog. (Decision 1 already dropped Client C, so I would not use the duty-nurse alert as the victim.)
+
+## What you would see
+
+Outbox depth climbing and not draining. Time from COMMIT to broker ack stretching into minutes, then hours. Dead-letter growth as handlers hit retry caps on stale work. Operators: “the status changed but the email never went.”
+
+## What you would do
+
+**Partition the outbox (and the relay) by tenant** — per-tenant queues or a tenant-aware poll — so A’s storm cannot starve B. That is the fix for this component. I would not add “and also rate-limit the API” in the same answer; the contractor already listed rate limiting as unbuilt, and naming it here is a second candidate.
+
+## I will not name
+
+Shared Postgres, offset pagination, RLS, inline SMS. Those fail at 3 clients or are a different question.
+
+## I will not do until you confirm
+
+I will not edit the draft until you say **do it**. If you want a different single component, say which one.
+
+Journal: this turn is **#17 B6 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+### assistant
+
+Executing B6: appending the single-component “what breaks first” answer, then updating SEQUENCE and the journal.
+
+_Tools: Read, Read, Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace, StrReplace, StrReplace, StrReplace, StrReplace_
+
+---
+
+### assistant
+
+**B6 is done.** Decision 3 is in `local-docs/draft-part3.md`. Still a draft — rewrite in your voice before the page.
+
+**One component:** the global outbox and its single polling relay.
+
+**What you would see:** queue depth that does not drain, COMMIT-to-broker lag, dead-letter growth, “status changed but the email never went.” A Client A storm delays Client B (not Client C — Decision 1).
+
+**What you would do:** partition the outbox and relay by tenant. Not the shared database, not pagination, not the rate limiter.
+
+Part 3 draft now has all three decisions. Sequence #17 is **done**. Next pending is **B7** (transcripts and reflection). Say **continue** when you want that briefed.
+
+---
+
+### user
+
+continue
+
+---
+
+### assistant
+
+`continue` means brief the next pending step only. Gathering real journal entries and transcript links so B7 is not a recap.
+
+_Tools: Read, Read, Grep, Read, Glob_
+
+---
+
+### assistant
+
+
+_Tools: Read, Read, Read, Grep_
+
+---
+
+### assistant
+
+
+_Tools: Read_
+
+---
+
+### assistant
+
+
+_Tools: StrReplace_
+
+---
+
+### assistant
+
+**`continue` means: brief #18 B7**, not run it. Next is **Part 4 — transcripts and reflection**. New file: `local-docs/draft-part4.md`. Gate: **real conversations**, not a recap. The brief reads “rejected” and “helped least” most carefully. There is a follow-up interview: this has to be yours.
+
+## Transcripts (the gap)
+
+Every journal `Chat:` line is **this Cursor thread**. There is **no public share URL**. One conversation covers the work from the brief through B6.
+
+The brief: share link, **or** export on the page, **or** paste if the tool has no share.
+
+On **do it** I will write the three notes and the closing paragraph. I will **not** invent a URL. For the transcript itself, pick one:
+
+1. You create a Cursor share link and paste it here, or  
+2. At C2 we put a readable export on the hosted page (Cursor has no share URL today).
+
+A summary of “how I used AI” without the thread would fail the gate.
+
+## Three notes I would write
+
+**Used:** Cursor (this agent) for the library (A1–A9), the audit loop, the handover drafts, and the Part 3 decisions. `node --test` / `local-docs/audit.js` as the gate, not as a second model. No other chat product is in the journal.
+
+**Rejected:** the **clarifying email to oz@benoz.ai**. It was on the original sequence (“asking is part of the exercise”). You asked why. The three queued questions were already in their README (`validateRecord` shape, custom fields, public repo). Sending them would have been padding. We **deleted** Q1; the only remaining email is C5 (the page URL).
+
+**Helped least:** isolation (Decision 1). The model can write pool-and-lose-C and silo-and-lose-A with equal fluency. That is a position you have to hold in the interview, not a code problem. Same for the Part 1/3 **voice** — drafts in `local-docs/` are not yours until you rewrite them. The unseen grader definition is also out of reach; A9 was only a simulation.
+
+## Closing paragraph I would write
+
+Left out: a real check of `FORCE ROW LEVEL SECURITY` / table owners (handover only); Israeli privacy law beyond the brief; any hybrid we were told scores zero. Least confident: whether the graders’ unseen rule uses something we listed as a non-goal, and whether “lose Client C” is still the call you will defend with a clinic already live.
+
+## I will not do until you confirm
+
+Say **do it** to write those notes. If you have a share link, include it. If you want a different “rejected” example (e.g. not padding Part 1 with the contractor’s “didn’t get to” list), say so now.
+
+Journal: this turn is **#18 B7 briefing / pending confirm**.
+
+---
+
+### user
+
+do it
+
+---
+
+_End of export. 265 turns._</pre>
+  <p><a href="index.html">Back to the submission</a></p>
+</body>
+</html>
