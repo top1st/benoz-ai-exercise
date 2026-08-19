@@ -2,7 +2,7 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { evaluateRules, resolveOperand } = require("../lib/rules");
+const { evaluateRules, resolveOperand, compare } = require("../lib/rules");
 
 const definition = {
   fields: [
@@ -71,4 +71,54 @@ test("operand naming a field not in the definition is unknown_field", () => {
 test("evaluateRules is still a stub", () => {
   const result = evaluateRules(definition, { start: "2027-01-15" }, []);
   assert.deepEqual(result, []);
+});
+
+test("eq is true for equal numbers and false otherwise", () => {
+  assert.deepEqual(compare(5, "eq", 5), { ok: true, matched: true });
+  assert.deepEqual(compare(5, "eq", 6), { ok: true, matched: false });
+});
+
+test("neq is true for unequal numbers and false otherwise", () => {
+  assert.deepEqual(compare(5, "neq", 6), { ok: true, matched: true });
+  assert.deepEqual(compare(5, "neq", 5), { ok: true, matched: false });
+});
+
+test("gt is true when left is greater", () => {
+  assert.deepEqual(compare(10, "gt", 9), { ok: true, matched: true });
+  assert.deepEqual(compare(9, "gt", 10), { ok: true, matched: false });
+});
+
+test("lt is true when left is lesser", () => {
+  assert.deepEqual(compare(9, "lt", 10), { ok: true, matched: true });
+  assert.deepEqual(compare(10, "lt", 9), { ok: true, matched: false });
+});
+
+test("gte and lte are true when values are equal", () => {
+  assert.deepEqual(compare(10, "gte", 10), { ok: true, matched: true });
+  assert.deepEqual(compare(10, "lte", 10), { ok: true, matched: true });
+  assert.deepEqual(compare(9, "gte", 10), { ok: true, matched: false });
+  assert.deepEqual(compare(10, "lte", 9), { ok: true, matched: false });
+});
+
+test("dates compare lexicographically across a year boundary", () => {
+  assert.deepEqual(compare("2026-12-31", "lt", "2027-01-01"), { ok: true, matched: true });
+  assert.deepEqual(compare("2027-01-01", "gt", "2026-12-31"), { ok: true, matched: true });
+  assert.deepEqual(compare("2026-12-31", "gte", "2027-01-01"), { ok: true, matched: false });
+});
+
+test("number vs string is type_mismatch, not coerced", () => {
+  assert.deepEqual(compare("10", "gt", 9), { ok: false, error: "type_mismatch" });
+});
+
+test("boolean ordering operators are type_mismatch", () => {
+  assert.deepEqual(compare(true, "gt", false), { ok: false, error: "type_mismatch" });
+});
+
+test("booleans support eq and neq", () => {
+  assert.deepEqual(compare(true, "eq", true), { ok: true, matched: true });
+  assert.deepEqual(compare(true, "neq", false), { ok: true, matched: true });
+});
+
+test("unknown operator is unknown_op", () => {
+  assert.deepEqual(compare(1, "foo", 2), { ok: false, error: "unknown_op" });
 });
