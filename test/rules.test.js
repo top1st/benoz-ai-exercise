@@ -4,6 +4,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const { evaluateRules, resolveOperand, compare, shouldEvaluateRule } = require("../lib/rules");
 const { validateRecord } = require("../lib/validate");
+const clientB = require("../clients/client-b-grant-foundation.json");
 
 const definition = {
   fields: [
@@ -320,4 +321,42 @@ test("validateRecord does not add a rule error when a required field is missing"
   assert.equal(result.valid, false);
   assert.ok(result.errors.some((e) => e.field === "start"));
   assert.ok(!result.errors.some((e) => e.message === "End must not be before start"));
+});
+
+function validClientBRecord() {
+  return {
+    organisation_name: "River Basin Trust",
+    registry_number: "RN-004821",
+    contact_person: "Dana Cole",
+    requested_amount: 25000,
+    priority_areas: ["environment", "education"],
+    project_description: "Riverbank restoration and youth education program.",
+    project_start_date: "2027-01-15",
+    project_end_date: "2027-12-15",
+    budget_file: { filename: "budget.pdf" },
+  };
+}
+
+test("client B fixture: end before start fails on project_end_date", () => {
+  const record = validClientBRecord();
+  record.project_start_date = "2027-12-15";
+  record.project_end_date = "2027-01-15";
+  const result = validateRecord(clientB, record);
+  assert.equal(result.valid, false);
+  assert.ok(
+    result.errors.some(
+      (e) =>
+        e.field === "project_end_date" &&
+        e.message === "Project end date must not be before project start date"
+    )
+  );
+});
+
+test("client B fixture: malformed start date does not add an end-date rule error", () => {
+  const record = validClientBRecord();
+  record.project_start_date = "15/01/2027";
+  const result = validateRecord(clientB, record);
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some((e) => e.field === "project_start_date"));
+  assert.ok(!result.errors.some((e) => e.field === "project_end_date"));
 });
